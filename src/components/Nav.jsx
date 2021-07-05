@@ -6,7 +6,7 @@ import { FormControl, FormLabel } from "@chakra-ui/form-control"
 
 export const Nav = () => {
     return (
-        <Container h="4rem" maxW="container.lg">
+        <Container h="4rem" maxW="75vw">
             <Flex h="100%" alignItems="center" justifyContent="space-between">
                 <Heading as="h3" fontSize="1.5rem" fontWeight="normal" fontFamily="Pacifico">Tourny</Heading>
                 <NavLinks />
