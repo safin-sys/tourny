@@ -17,7 +17,7 @@ export const MVP = ({ MVPInfo }) => {
                     </Text>
                 </Heading>
 
-                <Image objectFit="cover" objectPosition="60% 0%" w="350px" h="500px" borderRadius="15px" src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${MVPInfo.champion}_0.jpg`} />
+                <Image objectFit="cover" objectPosition="60% 0%" w="350px" h="500px" borderRadius="15px" src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${MVPInfo.champion}_0.jpg`} alt={MVPInfo.champion} />
                 
                 <Text flex="1 1 0px" fontWeight="bold" alignSelf="flex-end" fontStyle="italic" ml="1rem" mb="1rem">{MVPInfo.date} <br /> {MVPInfo.team1} <br /> vs <br /> {MVPInfo.team2}</Text>
             </Flex>
