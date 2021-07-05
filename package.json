@@ -1,10 +1,9 @@
 {
   "name": "tourny",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "CI= next build & next export",
+    "build": "next build & next export",
     "start": "next start",
     "lint": "next lint"
   },
