@@ -3,12 +3,13 @@ import { Avatar, Heading, Switch } from "@chakra-ui/react"
 import { useColorMode } from "@chakra-ui/color-mode"
 import { Menu, MenuButton, MenuList, MenuDivider } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
+import NextLink from 'next/link'
 
 export const Nav = () => {
     return (
         <Container h="4rem" maxW="75vw">
             <Flex h="100%" alignItems="center" justifyContent="space-between">
-                <Heading as="h3" fontSize="1.5rem" fontWeight="normal" fontFamily="Pacifico">Tourny</Heading>
+                <NextLink href="/"><Heading as="h3" fontSize="1.5rem" fontWeight="normal" fontFamily="Pacifico" cursor="pointer">Tourny</Heading></NextLink>
                 <NavLinks />
             </Flex>
         </Container>
@@ -48,9 +49,9 @@ const NavLinks = () => {
 const LoggedInLinks = () => {
     return (
         <>
-            <Link mr="1rem">Teams</Link>
-            <Link mr="1rem">Players</Link>
-            <Link mr="2rem">TW Cup 2021</Link>
+            <NextLink href="/"><Link mr="1rem">Home</Link></NextLink>
+            <NextLink href="/tournaments"><Link mr="1rem">Tournaments</Link></NextLink>
+            <NextLink href="#"><Link mr="1rem">TW 2020</Link></NextLink>
         </>
     )
 }
