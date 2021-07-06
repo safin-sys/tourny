@@ -40,7 +40,7 @@ export default function Tournaments() {
                     <Button colorScheme="twitter" onClick={onOpen}>Create Tournament</Button>
                 </Flex>
                 {list?.map((item, i) => {
-                    return <NextLink key={i} href={'/' + item.name}>
+                    return <NextLink key={i} href={'/t/' + i}>
                         <Container maxW="75vw" marginY="2rem" padding="0" cursor="pointer">
                             <Banner champion={item.champion} tournamentName={item.name} date={item.date} />
                         </Container>
@@ -64,7 +64,7 @@ import {
 } from "@chakra-ui/react"
 
 const champions = ['Katarina', 'Gwen', 'Jhin']
-const teams = ['G2', 'Fnatic', 'Misfits', 'T1', 'DAMWON KIA', 'Gen.G', 'TSM', 'Cloud9', 'Suning', 'Invictus Gaming', 'kt Rolster', 'Afreeca Freeks']
+const teams = ['Afreeca Freeks', 'Dragon X', 'DAMWON KIA', 'Fredit BRION', 'Gen.G', 'Hanwha Life', 'KT Rolster', 'Liiv SANDBOX', 'Nongshim RedForce', 'T1', 'Fnatic', 'G2']
 
 const CreateTournamentModal = ({ isOpen, onClose }) => {
     return (
