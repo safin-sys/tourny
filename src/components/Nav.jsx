@@ -23,7 +23,7 @@ const NavLinks = () => {
         <Flex alignItems="center" justifyContent="space-between" fontWeight="medium">
             {isLoggedIn ? <LoggedInLinks /> : <LoggedOutLinks />}
             <Menu closeOnSelect={false}>
-                <MenuButton colorScheme="blue">
+                <MenuButton>
                     <Avatar name="SafinTheShip" src="https://live.staticflickr.com/2445/3610341613_c8434baab9_b.jpg" />
                 </MenuButton>
                 <MenuList minWidth="240px">
@@ -50,8 +50,8 @@ const LoggedInLinks = () => {
     return (
         <>
             <NextLink href="/"><Link mr="1rem">Home</Link></NextLink>
-            <NextLink href="/tournaments"><Link mr="1rem">Tournaments</Link></NextLink>
-            <NextLink href="#"><Link mr="1rem">TW 2020</Link></NextLink>
+            <NextLink href="/ts"><Link mr="1rem">Tournaments</Link></NextLink>
+            <NextLink href="/"><Link mr="1rem">TW 2020</Link></NextLink>
         </>
     )
 }
