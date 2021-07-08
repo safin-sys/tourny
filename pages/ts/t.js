@@ -4,6 +4,8 @@ import { Nav } from "../../src/components/Nav"
 import { Footer } from "../../src/components/Footer"
 import { Banner } from "../../src/components/Banner"
 import { Container } from "@chakra-ui/layout"
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
+import { Schedule } from "../../src/components/Schedule"
 
 const list = [
     {
@@ -23,97 +25,121 @@ const list = [
     }
 ]
 
-// const matches = [
-//     {
-//         date: '24 June',
-//         format: 'Group Stage BO1',
-//         matches: [
-//             {
-//                 time: '2pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Nihilist Won'
-//             },
-//             {
-//                 time: '3pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Stoics Won'
-//             },
-//             {
-//                 time: '4pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Live'
-//             },
-//             {
-//                 time: '5pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Match starts in 2 hours'
-//             },
-//             {
-//                 time: '6pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: ''
-//             },
-//             {
-//                 time: '7pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Cancelled'
-//             },
-//         ]
-//     },
-//     {
-//         date: '25 June',
-//         format: 'Semi-Final BO3',
-//         matches: [
-//             {
-//                 time: '2pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Nihilist Won'
-//             },
-//             {
-//                 time: '3pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Stoics Won'
-//             },
-//             {
-//                 time: '4pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Live'
-//             },
-//             {
-//                 time: '5pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Match starts in 2 hours'
-//             },
-//             {
-//                 time: '6pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: ''
-//             },
-//             {
-//                 time: '7pm',
-//                 t1: 'Nihilist',
-//                 t2: 'Stoics',
-//                 result: 'Cancelled'
-//             },
-//         ]
-//     },
-// ]
+const matchDates = [
+    {
+        date: '24 June',
+        format: 'Group Stage BO1',
+        matches: [
+            {
+                time: '2pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Nihilist Won'
+            },
+            {
+                time: '3pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Stoics Won'
+            },
+            {
+                time: '4pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Live'
+            },
+            {
+                time: '5pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Match starts in 2 hours'
+            },
+            {
+                time: '6pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: ''
+            },
+            {
+                time: '7pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Cancelled'
+            },
+        ]
+    },
+    {
+        date: '25 June',
+        format: 'Semi-Final BO3',
+        matches: [
+            {
+                time: '2pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Nihilist Won'
+            },
+            {
+                time: '3pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Stoics Won'
+            },
+            {
+                time: '4pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Live'
+            },
+            {
+                time: '5pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Match starts in 2 hours'
+            },
+            {
+                time: '6pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: ''
+            },
+            {
+                time: '7pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Cancelled'
+            },
+        ]
+    },
+]
 
 export default function Tournament() {
     const router = useRouter()
     const { id } = router.query
-    const {name, champion, date} = list[id] || {}
+    const { name, champion, date } = list[id] || {}
     return (
         <>
             <Head>
@@ -122,6 +148,31 @@ export default function Tournament() {
             <Nav />
             <Container maxW="75vw">
                 <Banner champion={champion} tournamentName={name} date={date} />
+                <Tabs mt="1rem" isFitted colorScheme="twitter">
+                    <TabList>
+                        <Tab>Schedule</Tab>
+                        <Tab>Standings</Tab>
+                        <Tab>Teams</Tab>
+                        <Tab>Players</Tab>
+                    </TabList>
+
+                    <TabPanels>
+                        <TabPanel>
+                            {matchDates.map((matchDate, i) => {
+                                return <Schedule key={i} matchDate={matchDate} />
+                            })}
+                        </TabPanel>
+                        <TabPanel>
+                            <p>Standings</p>
+                        </TabPanel>
+                        <TabPanel>
+                            <p>Teams</p>
+                        </TabPanel>
+                        <TabPanel>
+                            <p>Players</p>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
             </Container>
             <Footer />
         </>

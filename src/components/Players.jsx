@@ -1,7 +1,7 @@
 import { Container, Heading, Grid } from "@chakra-ui/layout"
 import { Link } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { Player } from "./Player"
+import { Player } from "./AvatarContainer"
 
 export const Players = () => {
     const [users, setUsers] = useState()
