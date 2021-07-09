@@ -4,8 +4,9 @@ import { Nav } from "../../src/components/Nav"
 import { Footer } from "../../src/components/Footer"
 import { Banner } from "../../src/components/Banner"
 import { Container } from "@chakra-ui/layout"
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Button, useDisclosure } from "@chakra-ui/react"
 import { Schedule } from "../../src/components/Schedule"
+import { AddNewDate } from "../../src/components/Modals"
 
 const list = [
     {
@@ -140,6 +141,7 @@ export default function Tournament() {
     const router = useRouter()
     const { id } = router.query
     const { name, champion, date } = list[id] || {}
+    const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
             <Head>
@@ -161,6 +163,10 @@ export default function Tournament() {
                             {matchDates.map((matchDate, i) => {
                                 return <Schedule key={i} matchDate={matchDate} />
                             })}
+                            <Container display="flex" justifyContent="center">
+                                <Button onClick={onOpen} colorScheme="twitter">Add New Date</Button>
+                            </Container>
+                            <AddNewDate isOpen={isOpen} onClose={onClose} />
                         </TabPanel>
                         <TabPanel>
                             <p>Standings</p>
