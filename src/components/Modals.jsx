@@ -7,13 +7,26 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
+    Flex,
+    Select,
+    Checkbox,
+    CheckboxGroup,
 } from "@chakra-ui/react"
-import { Checkbox, CheckboxGroup, Select } from '@chakra-ui/react'
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
 import { Grid } from "@chakra-ui/layout"
+import { useState } from "react"
+import dayjs from "dayjs"
 
 export const AddNewDate = ({ isOpen, onClose }) => {
+    const [selectedDate, handleDateChange] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+    const match = {
+        time: dayjs(new Date()).format('HH:mm'),
+        team1: undefined,
+        team2: undefined
+    }
+    const [matches, setMatches] = useState([ match ])
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -21,7 +34,17 @@ export const AddNewDate = ({ isOpen, onClose }) => {
                 <ModalHeader>Add New Date</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <h1>updated body</h1>
+                    <FormControl>
+                        <FormLabel>Select Date & Time</FormLabel>
+                        <Input type="date" required value={selectedDate} onChange={e => handleDateChange(e.target.value)} />
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Create Matches</FormLabel>
+                        {matches.map((match, i) => {
+                            return <CreatMatches key={i} index={i} matches={matches} setMatches={setMatches} />
+                        })}
+                    </FormControl>
+                    <Button mt={4} onClick={() => setMatches(matches => [...matches, match])}>Add More Matches</Button>
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={onClose} mr={3}>Cancel</Button>
@@ -31,6 +54,43 @@ export const AddNewDate = ({ isOpen, onClose }) => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
+    )
+}
+
+const CreatMatches = ({ matches, setMatches, index }) => {
+    const { time, team1, team2 } = matches[index]
+    const handleTime = (e) => {
+        const newMatches = [...matches]
+        newMatches[index]['time'] = e.target.value
+        setMatches(newMatches)
+    }
+    const handleTeam = (e, teamNumber) => {
+        const newMatches = [...matches]
+        newMatches[index]['team' + teamNumber] = e.target.value
+        setMatches(newMatches)
+    }
+    const handleDelete = () => {
+        const newMatches = [...matches]
+        newMatches.splice(index, 1)
+        setMatches(newMatches)
+    }
+    return (
+        <Flex alignItems="center" mt={4}>
+            <Flex justifyContent="space-between">
+                <Input type="time" required value={time} onChange={e => handleTime(e)} mr="1rem" />
+                <Select placeholder="Select Team 1" mr="1rem" value={team1} onChange={e => handleTeam(e, 1)}>
+                    {teams.map((team, i) => {
+                        return <option key={i} value={team}>{team}</option>
+                    })}
+                </Select>
+                <Select placeholder="Select Team 2" value={team2} onChange={e => handleTeam(e, 2)}>
+                    {teams.map((team, i) => {
+                        return <option key={i} value={team}>{team}</option>
+                    })}
+                </Select>
+            </Flex>
+            <Button ml="1rem" colorScheme="red" onClick={handleDelete}>Delete</Button>
+        </Flex>
     )
 }
 

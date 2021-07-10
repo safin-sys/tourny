@@ -163,8 +163,9 @@ export default function Tournament() {
                             {matchDates.map((matchDate, i) => {
                                 return <Schedule key={i} matchDate={matchDate} />
                             })}
-                            <Container display="flex" justifyContent="center">
-                                <Button onClick={onOpen} colorScheme="twitter">Add New Date</Button>
+                            <Container display="flex" justifyContent="space-between" maxW="100%" padding="0">
+                                <Button colorScheme="red">Delete Tournament</Button>
+                                <Button onClick={onOpen} colorScheme="green">Add New Date</Button>
                             </Container>
                             <AddNewDate isOpen={isOpen} onClose={onClose} />
                         </TabPanel>
