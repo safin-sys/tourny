@@ -18,6 +18,54 @@ import { Grid } from "@chakra-ui/layout"
 import { useState } from "react"
 import dayjs from "dayjs"
 
+const champions = ['Katarina', 'Gwen', 'Jhin']
+const teams = ['Afreeca Freeks', 'Dragon X', 'DAMWON KIA', 'Fredit BRION', 'Gen.G', 'Hanwha Life', 'KT Rolster', 'Liiv SANDBOX', 'Nongshim RedForce', 'T1', 'Fnatic', 'G2']
+
+export const CreateTournamentModal = ({ isOpen, onClose }) => {
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Create Tournament</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                    <FormControl>
+                        <FormLabel>Tournament Name</FormLabel>
+                        <Input placeholder="Tournament Name" required />
+                    </FormControl>
+
+                    <FormControl mt={4}>
+                        <FormLabel>Select Cover Champion</FormLabel>
+                        <Select placeholder="Select a champion">
+                            {champions.map((champ, i) => {
+                                return <option key={i} value={champ}>{champ}</option>
+                            })}
+                        </Select>
+                    </FormControl>
+
+                    <FormControl mt={4}>
+                        <FormLabel>Select Participating Teams</FormLabel>
+                        <Grid templateColumns="1fr 1fr 1fr">
+                            <CheckboxGroup>
+                                {teams.map((team, i) => {
+                                    return <Checkbox marginY=".5rem" value={team} key={i}>{team}</Checkbox>
+                                })}
+                            </CheckboxGroup>
+                        </Grid>
+                    </FormControl>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button onClick={onClose} mr={3}>Cancel</Button>
+                    <Button colorScheme="twitter">
+                        Save
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
 export const AddNewDate = ({ isOpen, onClose }) => {
     const [selectedDate, handleDateChange] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
     const match = {
@@ -25,18 +73,22 @@ export const AddNewDate = ({ isOpen, onClose }) => {
         team1: undefined,
         team2: undefined
     }
-    const [matches, setMatches] = useState([ match ])
+    const [matches, setMatches] = useState([match])
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
-            <ModalContent maxW="50vw">
+            <ModalContent>
                 <ModalHeader>Add New Date</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <FormControl>
-                        <FormLabel>Select Date & Time</FormLabel>
+                        <FormLabel>Select Date</FormLabel>
                         <Input type="date" required value={selectedDate} onChange={e => handleDateChange(e.target.value)} />
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Add Format</FormLabel>
+                        <Input required />
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Create Matches</FormLabel>
@@ -94,43 +146,59 @@ const CreatMatches = ({ matches, setMatches, index }) => {
     )
 }
 
-const champions = ['Katarina', 'Gwen', 'Jhin']
-const teams = ['Afreeca Freeks', 'Dragon X', 'DAMWON KIA', 'Fredit BRION', 'Gen.G', 'Hanwha Life', 'KT Rolster', 'Liiv SANDBOX', 'Nongshim RedForce', 'T1', 'Fnatic', 'G2']
-
-export const CreateTournamentModal = ({ isOpen, onClose }) => {
+const EditMatches = ({ match }) => {
+    const matchStatus = ['Team 1 Won', 'Team 2 Won', 'Live', 'Match starts soon', 'Cancelled']
+    const { time, t1, t2, result } = match
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Flex alignItems="center" mt={4}>
+            <Flex justifyContent="space-between">
+                <Input type="time" required mr="1rem" value={`0${time[0]}:00`} />
+                <Select placeholder={t1} mr="1rem">
+                    {teams.map((team, i) => {
+                        return <option key={i} value={team}>{team}</option>
+                    })}
+                </Select>
+                <Select placeholder={t2} mr="1rem">
+                    {teams.map((team, i) => {
+                        return <option key={i} value={team}>{team}</option>
+                    })}
+                </Select>
+                <Select placeholder={result}>
+                    {matchStatus.map((status, i) => {
+                        return <option key={i} value={status}>{status}</option>
+                    })}
+                </Select>
+            </Flex>
+            <Button ml="1rem" colorScheme="red">Delete</Button>
+        </Flex>
+    )
+}
+
+export const EditDate = ({ isOpen, onClose, matchDate }) => {
+    const { date, format, matches } = matchDate
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
-            <ModalContent maxW="50vw">
-                <ModalHeader>Create Tournament</ModalHeader>
+            <ModalContent>
+                <ModalHeader>Edit {date}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody pb={6}>
+                <ModalBody>
                     <FormControl>
-                        <FormLabel>Tournament Name</FormLabel>
-                        <Input placeholder="Tournament Name" required />
+                        <FormLabel>Edit Date</FormLabel>
+                        <Input type="date" required value={dayjs(date).format('YYYY-MM-DD')} />
                     </FormControl>
-
                     <FormControl mt={4}>
-                        <FormLabel>Select Cover Champion</FormLabel>
-                        <Select placeholder="Select a champion">
-                            {champions.map((champ, i) => {
-                                return <option key={i} value={champ}>{champ}</option>
-                            })}
-                        </Select>
+                        <FormLabel>Edit Format</FormLabel>
+                        <Input required value={format} />
                     </FormControl>
-
                     <FormControl mt={4}>
-                        <FormLabel>Select Participating Teams</FormLabel>
-                        <Grid templateColumns="1fr 1fr 1fr">
-                            <CheckboxGroup>
-                                {teams.map((team, i) => {
-                                    return <Checkbox marginY=".5rem" value={team} key={i}>{team}</Checkbox>
-                                })}
-                            </CheckboxGroup>
-                        </Grid>
+                        <FormLabel>Edit Matches</FormLabel>
+                        {matches.map((match, i) => {
+                            return <EditMatches key={i} match={match} />
+                        })}
                     </FormControl>
+                    <Button mt={4} onClick={() => setMatches(matches => [...matches, match])}>Add More Matches</Button>
                 </ModalBody>
-
                 <ModalFooter>
                     <Button onClick={onClose} mr={3}>Cancel</Button>
                     <Button colorScheme="twitter">

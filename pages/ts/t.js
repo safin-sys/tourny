@@ -141,7 +141,11 @@ export default function Tournament() {
     const router = useRouter()
     const { id } = router.query
     const { name, champion, date } = list[id] || {}
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const {
+        isOpen: isOpenAddNewDate,
+        onOpen: onOpenAddNewDate,
+        onClose: onCloseAddNewDate
+    } = useDisclosure()
     return (
         <>
             <Head>
@@ -165,9 +169,9 @@ export default function Tournament() {
                             })}
                             <Container display="flex" justifyContent="space-between" maxW="100%" padding="0">
                                 <Button colorScheme="red">Delete Tournament</Button>
-                                <Button onClick={onOpen} colorScheme="green">Add New Date</Button>
+                                <Button onClick={onOpenAddNewDate} colorScheme="green">Add New Date</Button>
                             </Container>
-                            <AddNewDate isOpen={isOpen} onClose={onClose} />
+                            <AddNewDate isOpen={isOpenAddNewDate} onClose={onCloseAddNewDate} />
                         </TabPanel>
                         <TabPanel>
                             <p>Standings</p>

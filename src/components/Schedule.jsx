@@ -1,16 +1,18 @@
 import { Container, Flex, Heading, Text, Grid } from "@chakra-ui/layout"
-import { Button } from "@chakra-ui/react"
+import { Button, useDisclosure } from "@chakra-ui/react"
 import { Team } from './AvatarContainer'
+import { EditDate } from "./Modals"
 
 export const Schedule = ({ matchDate }) => {
     const { date, format, matches } = matchDate
+    const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <Container maxW="100%" padding="0" mb="4rem">
             <Flex justifyContent="space-between" alignItems="center">
                 <Heading fontSize="1.5rem">{date}</Heading>
                 <Heading fontSize="1.5rem" display="flex" alignItems="center">
                     {format}
-                    <Button ml="1rem">Edit</Button>
+                    <Button ml="1rem" onClick={onOpen}>Edit</Button>
                 </Heading>
             </Flex>
             <Container maxW="100%" padding="0">
@@ -18,6 +20,7 @@ export const Schedule = ({ matchDate }) => {
                     return <Match key={i} match={match} />
                 })}
             </Container>
+            <EditDate isOpen={isOpen} onClose={onClose} matchDate={matchDate} />
         </Container>
     )
 }
