@@ -7,6 +7,7 @@ import { Container } from "@chakra-ui/layout"
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Button, useDisclosure } from "@chakra-ui/react"
 import { Schedule } from "../../src/components/Schedule"
 import { AddNewDate } from "../../src/components/Modals"
+import { Standings } from "../../src/components/Standings"
 
 const list = [
     {
@@ -173,7 +174,7 @@ export default function Tournament() {
                             <AddNewDate isOpen={isOpenAddNewDate} onClose={onCloseAddNewDate} />
                         </TabPanel>
                         <TabPanel>
-                            <p>Standings</p>
+                            <Standings />
                         </TabPanel>
                         <TabPanel>
                             <p>Teams</p>
