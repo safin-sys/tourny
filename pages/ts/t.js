@@ -170,7 +170,6 @@ export default function Tournament() {
                     <TabList>
                         <Tab>Schedule</Tab>
                         <Tab>Standings</Tab>
-                        <Tab>Teams</Tab>
                     </TabList>
 
                     <TabPanels>
@@ -186,9 +185,6 @@ export default function Tournament() {
                         </TabPanel>
                         <TabPanel>
                             <Standings standings={standings} />
-                        </TabPanel>
-                        <TabPanel>
-                            <TournamentTeams teams={standings} />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
