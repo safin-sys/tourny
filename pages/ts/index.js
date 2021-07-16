@@ -1,6 +1,4 @@
 import Head from "next/head"
-import { Footer } from "../../src/components/Footer"
-import { Nav } from "../../src/components/Nav"
 import { Banner } from "../../src/components/Banner"
 import { Flex, Container, Heading, Grid } from "@chakra-ui/layout"
 import NextLink from "next/link"
@@ -32,7 +30,6 @@ export default function Tournaments() {
             <Head>
                 <title>Tournaments | Tourny</title>
             </Head>
-            <Nav />
             <Container maxW="75vw" marginY="1rem">
                 <Flex justifyContent="space-between" alignItems="center">
                     <Heading fontSize="1.5rem">Tournaments</Heading>
@@ -47,7 +44,6 @@ export default function Tournaments() {
                 })}
             </Container>
             <CreateTournamentModal isOpen={isOpen} onClose={onClose} />
-            <Footer />
         </>
     )
 }

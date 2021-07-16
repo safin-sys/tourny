@@ -21,7 +21,9 @@ const NavLinks = () => {
     const isLoggedIn = true
     return (
         <Flex alignItems="center" justifyContent="space-between" fontWeight="medium">
-            {isLoggedIn ? <LoggedInLinks /> : <LoggedOutLinks />}
+            {/* {isLoggedIn ? <LoggedInLinks /> : <LoggedOutLinks />} */}
+            <LoggedInLinks />
+            <LoggedOutLinks />
             <Menu closeOnSelect={false}>
                 <MenuButton>
                     <Avatar name="SafinTheShip" src="https://live.staticflickr.com/2445/3610341613_c8434baab9_b.jpg" />
@@ -59,9 +61,8 @@ const LoggedInLinks = () => {
 const LoggedOutLinks = () => {
     return (
         <>
-            <Link mr="1rem">TW Cup 2021</Link>
-            <Link mr="1rem">Login</Link>
-            <Link mr="2rem">Register</Link>
+            <NextLink href="/login"><Link mr="1rem">Login</Link></NextLink>
+            <NextLink href="/register"><Link mr="2rem">Register</Link></NextLink>
         </>
     )
 }

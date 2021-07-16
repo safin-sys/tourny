@@ -1,14 +1,11 @@
 import { useRouter } from "next/router"
 import Head from 'next/head'
-import { Nav } from "../../src/components/Nav"
-import { Footer } from "../../src/components/Footer"
 import { Banner } from "../../src/components/Banner"
 import { Container } from "@chakra-ui/layout"
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Button, useDisclosure, Grid } from "@chakra-ui/react"
 import { Schedule } from "../../src/components/Schedule"
 import { AddNewDate } from "../../src/components/Modals"
 import { Standings } from "../../src/components/Standings"
-import { Team } from "../../src/components/AvatarContainer"
 import { TournamentTeams } from "../../src/components/TournamentTeams"
 
 const list = [
@@ -167,7 +164,6 @@ export default function Tournament() {
             <Head>
                 <title>{`${name} | Tourny`}</title>
             </Head>
-            <Nav />
             <Container maxW="75vw">
                 <Banner champion={champion} tournamentName={name} date={date} />
                 <Tabs mt="1rem" isFitted colorScheme="twitter">
@@ -197,7 +193,6 @@ export default function Tournament() {
                     </TabPanels>
                 </Tabs>
             </Container>
-            <Footer />
         </>
     )
 }

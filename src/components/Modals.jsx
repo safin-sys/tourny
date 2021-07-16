@@ -209,3 +209,27 @@ export const EditDate = ({ isOpen, onClose, matchDate }) => {
         </Modal>
     )
 }
+
+export const ForgotPassword = ({ isOpen, onClose }) => {
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Password Recovery</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <FormControl>
+                        <FormLabel>Enter Your Email</FormLabel>
+                        <Input type="email" required />
+                    </FormControl>
+                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={onClose} mr={3}>Cancel</Button>
+                    <Button colorScheme="twitter">
+                        Send Verification Email
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
