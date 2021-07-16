@@ -31,9 +31,9 @@ export const Match = ({ match }) => {
         <Grid alignItems="center" marginY="1.5rem" templateColumns="1fr 1fr 1fr">
             <Heading fontSize="1.5rem">{time[0]}<Heading as="p" fontSize="1rem" display="inline-block">pm</Heading></Heading>
             <Flex justifyContent="space-between" w="400px" alignItems="center">
-                <Team team={{ name: t1, logo: t1Logo }} />
+                <Team team={{ name: t1, logo: t1Logo }} size="sm" />
                 <Text>vs</Text>
-                <Team team={{ name: t2, logo: t2Logo }} flip />
+                <Team team={{ name: t2, logo: t2Logo }} flip size="sm" />
             </Flex>
             <Heading fontSize="1rem" justifySelf="end">{result}</Heading>
         </Grid>
