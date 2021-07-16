@@ -6,7 +6,6 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, Button, useDisclosure, Grid } 
 import { Schedule } from "../../src/components/Schedule"
 import { AddNewDate } from "../../src/components/Modals"
 import { Standings } from "../../src/components/Standings"
-import { TournamentTeams } from "../../src/components/TournamentTeams"
 
 const list = [
     {
