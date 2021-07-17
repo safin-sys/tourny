@@ -11,6 +11,9 @@ import {
     Select,
     Checkbox,
     CheckboxGroup,
+    Avatar,
+    Heading,
+    Box,
 } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
@@ -228,6 +231,53 @@ export const ForgotPassword = ({ isOpen, onClose }) => {
                     <Button colorScheme="twitter">
                         Send Verification Email
                     </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+export const EditPlayer = ({ isOpen, onClose, player }) => {
+    const { name, picture } = player
+    const fullname = `${name.first} ${name.last}`
+    const src = picture.thumbnail
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>
+                    <Flex alignItems="center">
+                        <Avatar name={fullname} src={src} mr=".5rem" />
+                        <Heading ml=".5rem" fontSize="1rem" fontWeight="semibold">{fullname}</Heading>
+                    </Flex>
+                </ModalHeader>
+                <ModalCloseButton />
+                <ModalBody display="flex">
+                    <FormControl mr="1rem">
+                        <FormLabel>Select Status</FormLabel>
+                        <Select defaultValue="Player">
+                            <option>Admin</option>
+                            <option>Captain</option>
+                            <option>Player</option>
+                        </Select>
+                    </FormControl>
+                    <FormControl ml="1rem">
+                        <FormLabel>Select Team</FormLabel>
+                        <Select mr="1rem">
+                            {teams.map((team, i) => {
+                                return <option key={i} value={team}>{team}</option>
+                            })}
+                        </Select>
+                    </FormControl>
+                </ModalBody>
+                <ModalFooter display="flex" justifyContent="space-between">
+                    <Button colorScheme="red" mr={3}>Delete Player</Button>
+                    <Box>
+                        <Button onClick={onClose} mr={3}>Cancel</Button>
+                        <Button colorScheme="twitter">
+                            Save
+                        </Button>
+                    </Box>
                 </ModalFooter>
             </ModalContent>
         </Modal>

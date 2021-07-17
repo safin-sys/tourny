@@ -4,7 +4,7 @@ import { Flex } from "@chakra-ui/react"
 
 export const MVP = ({ MVPInfo }) => {
     return (
-        <Container maxW="75vw">
+        <Container maxW="75vw" mt="1rem">
             <Flex alignItems="center" justifyContent="center">
                 <Heading fontSize="4rem" flex="1 1 0px" textAlign="right" mr="1rem">
                     MVP of <br /> the Week

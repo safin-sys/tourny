@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import { MVP } from '../src/components/MVP'
 import { Ongoing } from '../src/components/Ongoing';
-import { Players } from '../src/components/Players';
 
 const MVPInfo = { 
 	playerName: 'SafinTheShip',
@@ -27,7 +26,6 @@ export default function Home() {
 			</Head>
 			<MVP MVPInfo={MVPInfo} />
 			<Ongoing OngoingInfo={OngoingInfo} />
-			<Players />
 		</>
 	)
 }

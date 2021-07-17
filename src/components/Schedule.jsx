@@ -1,6 +1,5 @@
 import { Container, Flex, Heading, Text, Grid } from "@chakra-ui/layout"
-import { Button, useDisclosure } from "@chakra-ui/react"
-import { Team } from './AvatarContainer'
+import { Avatar, Button, useDisclosure } from "@chakra-ui/react"
 import { EditDate } from "./Modals"
 
 export const Schedule = ({ matchDate }) => {
@@ -37,5 +36,17 @@ export const Match = ({ match }) => {
             </Flex>
             <Heading fontSize="1rem" justifySelf="end">{result}</Heading>
         </Grid>
+    )
+}
+
+const Team = ({ team, flip, size }) => {
+    const { name, logo } = team
+    return (
+        <Flex alignItems="center" flexDirection={flip ? 'row-reverse' : 'row'}>
+            <Avatar size={size} name={name} bgColor="gray.800" src={logo} marginX=".5rem" />
+            <div>
+                <Heading fontSize="1rem" fontWeight="semibold">{name}</Heading>
+            </div>
+        </Flex>
     )
 }

@@ -51,9 +51,9 @@ const NavLinks = () => {
 const LoggedInLinks = () => {
     return (
         <>
-            <NextLink href="/"><Link mr="1rem">Home</Link></NextLink>
-            <NextLink href="/ts"><Link mr="1rem">Tournaments</Link></NextLink>
-            <NextLink href="/"><Link mr="1rem">TW 2020</Link></NextLink>
+            <NextLink href="/"><Link mr="1.5rem">Home</Link></NextLink>
+            <NextLink href="/ts"><Link mr="1.5rem">Tournaments</Link></NextLink>
+            <NextLink href="/players"><Link mr="1.5rem">Players</Link></NextLink>
         </>
     )
 }
@@ -61,7 +61,7 @@ const LoggedInLinks = () => {
 const LoggedOutLinks = () => {
     return (
         <>
-            <NextLink href="/login"><Link mr="1rem">Login</Link></NextLink>
+            <NextLink href="/login"><Link mr="1.5rem">Login</Link></NextLink>
             <NextLink href="/register"><Link mr="2rem">Register</Link></NextLink>
         </>
     )
