@@ -1,4 +1,5 @@
-import { Avatar, Grid, Heading, Text } from "@chakra-ui/react"
+import { Avatar, Grid, Heading, Text, useColorMode } from "@chakra-ui/react"
+import NextLink from 'next/link'
 
 export const Standings = ({ standings }) => {
     return (
@@ -18,13 +19,18 @@ export const Standings = ({ standings }) => {
 
 const TeamStandingAvatar = ({ standing, rank }) => {
     const { team, logo, win, lose } = standing
+    const { colorMode } = useColorMode()
     return (
-        <Grid alignItems="center" mb="1.5rem" templateColumns="1fr 1fr 1fr 1fr 1fr" justifyItems="center">
-            <Heading fontSize="1.5rem">{rank + 1}</Heading>
-            <Avatar mr="1rem" name={team} bgColor="gray.800" src={logo} />
-            <Heading fontSize="1rem" justifySelf="left">{team}</Heading>
-            <Text>{win}</Text>
-            <Text>{lose}</Text>
-        </Grid>
+        <NextLink href={`/team?id=${rank}`}>
+            <Grid alignItems="center" paddingY="1rem" templateColumns="1fr 1fr 1fr 1fr 1fr" justifyItems="center" cursor="pointer" _hover={{
+                background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
+            }}>
+                <Heading fontSize="1.5rem">{rank + 1}</Heading>
+                <Avatar mr="1rem" name={team} bgColor="gray.800" src={logo} />
+                <Heading fontSize="1rem" justifySelf="left">{team}</Heading>
+                <Text>{win}</Text>
+                <Text>{lose}</Text>
+            </Grid>
+        </NextLink>
     )
 }
