@@ -2,6 +2,8 @@ import { Avatar, Box, Button, Container, Flex, Grid, Heading, Text } from "@chak
 import { useRouter } from "next/router"
 import { Banner } from "../src/components/Banner";
 import Head from "next/head"
+import TeamMembers from "../src/components/TeamMembers";
+import { Schedule } from "../src/components/Schedule"
 
 const standings = [
     { team: 'Astralis', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FAST-FullonDark.png', win: '5', lose: '6' },
@@ -15,6 +17,117 @@ const standings = [
     { team: 'Schalke 04', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FS04_Standard_Logo1.png', win: '3', lose: '8' },
     { team: 'SK Gaming', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FSK_FullColor.png', win: '2', lose: '9' }
 ].sort((a, b) => (b.win - b.lose) - (a.win - a.lose));
+
+const matchDates = [
+    {
+        date: '24 June',
+        format: 'Group Stage BO1',
+        matches: [
+            {
+                time: '2pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Nihilist Won'
+            },
+            {
+                time: '3pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Stoics Won'
+            },
+            {
+                time: '4pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Live'
+            },
+            {
+                time: '5pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'In 2 hours'
+            },
+            {
+                time: '6pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: ''
+            },
+            {
+                time: '7pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Cancelled'
+            },
+        ]
+    },
+    {
+        date: '25 June',
+        format: 'Semi-Final BO3',
+        matches: [
+            {
+                time: '2pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Nihilist Won'
+            },
+            {
+                time: '3pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Stoics Won'
+            },
+            {
+                time: '4pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Live'
+            },
+            {
+                time: '5pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'In 2 hours'
+            },
+            {
+                time: '6pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: ''
+            },
+            {
+                time: '7pm',
+                t1: 'Nihilist',
+                t1Logo: 'http://www.clker.com/cliparts/5/b/6/3/127641027259477234nihilism.png',
+                t2: 'Stoics',
+                t2Logo: 'http://1.bp.blogspot.com/_7aC-CR9P08U/SaAM0mVExyI/AAAAAAAAAc8/zJN6SrkpLHg/s200/Stoic+Emblem+black+only-lowres.jpg',
+                result: 'Cancelled'
+            },
+        ]
+    },
+]
 
 export default function TeamPage() {
     const router = useRouter()
@@ -43,11 +156,25 @@ export default function TeamPage() {
                             <Star />
                         </Flex>
                     </Flex>
-                    <Text>Captain Rekkless</Text>
+                    <Flex mt={2}>
+                        <Text mr={2}>LCK Spring 2020</Text>
+                        <Text mr={2}>-</Text>
+                        <Text mr={2}>LCK Summer 2021</Text>
+                        <Text mr={2}>-</Text>
+                        <Text mr={2}>LCK Fall 2021</Text>
+                    </Flex>
                 </Container>
                 <Grid templateColumns=".5fr 1fr" mt={8} textAlign="center">
-                    <Text borderBottom="2px solid" borderColor="#dedede" pb=".5rem">Team</Text>
-                    <Text borderBottom="2px solid" borderColor="twitter.600" pb=".5rem">Schedule</Text>
+                    <Text fontWeight="bold" borderBottom="2px solid" borderColor="#dedede" pb=".5rem">Members</Text>
+                    <Text fontWeight="bold" borderBottom="2px solid" borderColor="twitter.600" pb=".5rem">Schedule</Text>
+                </Grid>
+                <Grid templateColumns=".5fr 1fr" mt={4} gap="2rem">
+                    <TeamMembers />
+                    <Box>
+                        {matchDates.map((matchDate, i) => {
+                            return <Schedule key={i} matchDate={matchDate} />
+                        })}
+                    </Box>
                 </Grid>
             </Container>
         </>
