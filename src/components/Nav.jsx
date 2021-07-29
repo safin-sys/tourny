@@ -20,7 +20,7 @@ const NavLinks = () => {
     const { colorMode, toggleColorMode } = useColorMode()
     const isLoggedIn = true
     return (
-        <Flex alignItems="center" justifyContent="space-between" fontWeight="medium">
+        <Flex className="nav-links" alignItems="center" justifyContent="space-between" fontWeight="medium">
             {/* {isLoggedIn ? <LoggedInLinks /> : <LoggedOutLinks />} */}
             <LoggedInLinks />
             <LoggedOutLinks />
@@ -51,9 +51,9 @@ const NavLinks = () => {
 const LoggedInLinks = () => {
     return (
         <>
-            <NextLink href="/"><Link mr="1.5rem">Home</Link></NextLink>
-            <NextLink href="/ts"><Link mr="1.5rem">Tournaments</Link></NextLink>
-            <NextLink href="/players"><Link mr="1.5rem">Players</Link></NextLink>
+            <NextLink href="/"><a>Home</a></NextLink>
+            <NextLink href="/ts"><a>Tournaments</a></NextLink>
+            <NextLink href="/players"><a>Players</a></NextLink>
         </>
     )
 }
@@ -61,8 +61,8 @@ const LoggedInLinks = () => {
 const LoggedOutLinks = () => {
     return (
         <>
-            <NextLink href="/login"><Link mr="1.5rem">Login</Link></NextLink>
-            <NextLink href="/register"><Link mr="2rem">Register</Link></NextLink>
+            <NextLink href="/login"><a>Login</a></NextLink>
+            <NextLink href="/register"><a>Register</a></NextLink>
         </>
     )
 }

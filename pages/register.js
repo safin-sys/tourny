@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Link } from "@chakra-ui/react"
+import { Box, Button, Container, FormControl, FormLabel, Heading, Input } from "@chakra-ui/react"
 import Head from "next/head"
 import NextLink from "next/link"
 
@@ -25,7 +25,7 @@ export default function Register() {
                     </FormControl>
                     <Button colorScheme="twitter" w="100%" mt={4}>Register</Button>
                     <Box mt={4}>
-                        <NextLink href="/login"><Link>Already have an Account?</Link></NextLink>
+                        <NextLink href="/login"><a>Already have an Account?</a></NextLink>
                     </Box>
                 </Container>
             </Container>

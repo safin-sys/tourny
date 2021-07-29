@@ -1,4 +1,4 @@
-import { Button, Container, Flex, FormControl, FormLabel, Heading, Input, Link, useDisclosure } from "@chakra-ui/react"
+import { Button, Container, Flex, FormControl, FormLabel, Heading, Input, useDisclosure } from "@chakra-ui/react"
 import Head from "next/head"
 import NextLink from "next/link"
 import { ForgotPassword } from "../src/components/Modals"
@@ -23,8 +23,8 @@ export default function LoginPage() {
                     </FormControl>
                     <Button colorScheme="twitter" w="100%" mt={4}>Login</Button>
                     <Flex justifyContent="space-between" mt={4}>
-                        <Link onClick={onOpen}>Forgot Password?</Link>
-                        <NextLink href="/register"><Link>Create Account</Link></NextLink>
+                        <a onClick={onOpen}>Forgot Password?</a>
+                        <NextLink href="/register"><a>Create Account</a></NextLink>
                     </Flex>
                 </Container>
                 <ForgotPassword isOpen={isOpen} onClose={onClose} />
