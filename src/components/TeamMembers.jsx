@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Heading, Text, useColorMode } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Heading, Text, useColorMode } from "@chakra-ui/react";
 
 const team = [
     { name: 'Canna', captain: false, role: 'Top' },
@@ -11,12 +11,6 @@ const team = [
 export default function TeamMembers() {
     return (
         <Flex flexDirection="column">
-            <Flex w="100%" justifyContent="space-between">
-                <Heading fontSize="1.5rem">
-                    Taoists
-                </Heading>
-                <Button variant="outline" colorScheme="twitter">Edit Members</Button>
-            </Flex>
             <Flex mt={4} flexDir="column">
                 {team.map((member, i) => {
                     return <MemberDetails key={i} member={member} />

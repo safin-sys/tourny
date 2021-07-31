@@ -155,7 +155,7 @@ const EditMatches = ({ match }) => {
     return (
         <Flex alignItems="center" mt={4}>
             <Flex justifyContent="space-between">
-                <Input type="time" required mr="1rem" value={`0${time[0]}:00`} />
+                <Input type="time" required mr="1rem" placeholder={`0${time[0]}:00`} />
                 <Select placeholder={t1} mr="1rem">
                     {teams.map((team, i) => {
                         return <option key={i} value={team}>{team}</option>
@@ -188,11 +188,11 @@ export const EditDate = ({ isOpen, onClose, matchDate }) => {
                 <ModalBody>
                     <FormControl>
                         <FormLabel>Edit Date</FormLabel>
-                        <Input type="date" required value={dayjs(date).format('YYYY-MM-DD')} />
+                        <Input type="date" required placeholder={dayjs(date).format('YYYY-MM-DD')} />
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Edit Format</FormLabel>
-                        <Input required value={format} />
+                        <Input required placeholder={format} />
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Edit Matches</FormLabel>
@@ -255,7 +255,7 @@ export const EditPlayer = ({ isOpen, onClose, player }) => {
                 <ModalBody display="flex">
                     <FormControl mr="1rem">
                         <FormLabel>Select Status</FormLabel>
-                        <Select defaultValue="Player">
+                        <Select value="Player">
                             <option>Admin</option>
                             <option>Captain</option>
                             <option>Player</option>
@@ -285,6 +285,12 @@ export const EditPlayer = ({ isOpen, onClose, player }) => {
 }
 
 export const EditTeam = ({ isOpen, onClose, team }) => {
+    const member = {
+        name: undefined,
+        role: undefined,
+        captain: false
+    }
+    const [members, setMembers] = useState([member])
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
@@ -292,15 +298,43 @@ export const EditTeam = ({ isOpen, onClose, team }) => {
                 <ModalHeader>Edit Team</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <FormControl>
-                        <FormLabel>Edit Name</FormLabel>
-                        <Input value={team} />
-                    </FormControl>
+                    <Flex>
+                        <FormControl mr="1rem">
+                            <FormLabel>Edit Name</FormLabel>
+                            <Input placeholder={team} />
+                        </FormControl>
+                        <FormControl w="auto">
+                            <FormLabel>Change Logo</FormLabel>
+                            <Button>
+                                Click to Upload
+                                <Input type="file" hidden />
+                            </Button>
+                        </FormControl>
+                    </Flex>
                     <FormControl mt={4}>
                         <FormLabel>Change Cover</FormLabel>
                         <Select>
                             {champions.map((champ, i) => {
                                 return <option key={i} value={champ}>{champ}</option>
+                            })}
+                        </Select>
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Add Members</FormLabel>
+                        {members.map((match, i) => {
+                            return <CreatMembers key={i} index={i} members={members} setMembers={setMembers} />
+                        })}
+                    </FormControl>
+                    <Button mt={4} onClick={() => setMembers(members => [...members, member])}>Add More Players</Button>
+                    <FormControl mt={4}>
+                        <FormLabel>Select Captain</FormLabel>
+                        <Select placeholder="Select Captain">
+                            {members.map((member, i) => {
+                                if(member.name) {
+                                    return <option key={i} value={member.name}>{member.name}</option>
+                                } else {
+                                    return <option key={i} value={null}>No Player</option>
+                                }
                             })}
                         </Select>
                     </FormControl>
@@ -316,5 +350,38 @@ export const EditTeam = ({ isOpen, onClose, team }) => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
+    )
+}
+
+const CreatMembers = ({ members, setMembers, index }) => {
+    const { name, role, captain } = members[index]
+    const handleChange = (e, key) => {
+        const newMember = [...members]
+        newMember[index][key] = e.target.value
+        setMembers(newMember)
+    }
+    const handleDelete = () => {
+        const newMember = [...members]
+        newMember.splice(index, 1)
+        setMembers(newMember)
+    }
+    const roles = ['Top', 'Jungle', 'Mid', 'ADC', 'Support', 'Substitute']
+    const players = ['Wunder', 'Jankos', 'Caps', 'Perkz', 'Rekkless', 'Mikyx']
+    return (
+        <Flex alignItems="center" mt={4}>
+            <Flex justifyContent="space-between" w="100%">
+                <Select placeholder="Select Player" mr="1rem" onChange={e => handleChange(e, 'name')}>
+                    {players.map((player, i) => {
+                        return <option key={i} value={player}>{player}</option>
+                    })}
+                </Select>
+                <Select placeholder="Select Role" onChange={e => handleChange(e, 'role')}>
+                    {roles.map((role, i) => {
+                        return <option key={i} value={role}>{role}</option>
+                    })}
+                </Select>
+            </Flex>
+            <Button ml="1rem" colorScheme="red" onClick={handleDelete}>Delete</Button>
+        </Flex>
     )
 }
