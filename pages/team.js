@@ -1,9 +1,10 @@
-import { Avatar, Box, Button, Container, Flex, Grid, Heading, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Container, Flex, Grid, Heading, Text, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router"
 import { Banner } from "../src/components/Banner";
 import Head from "next/head"
 import TeamMembers from "../src/components/TeamMembers";
 import { Schedule } from "../src/components/Schedule"
+import { EditTeam } from "../src/components/Modals";
 
 const standings = [
     { team: 'Astralis', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FAST-FullonDark.png', win: '5', lose: '6' },
@@ -133,6 +134,7 @@ export default function TeamPage() {
     const router = useRouter()
     const { id } = router.query
     const { team, logo } = id ? standings[id] : standings[0]
+    const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
             <Head>
@@ -143,9 +145,10 @@ export default function TeamPage() {
                     <Banner mt="1rem" champion="Lux" skin="15" offset="8" />
                     <Flex w="60vw" alignItems="center" justifyContent="space-between" pos="absolute" top="75%" left="0" right="0" mx="auto">
                         <Avatar border="2px #111 solid" size="xl" padding=".5rem" name={team} src={logo} bgColor="gray.800" />
-                        <Button alignSelf="flex-end" colorScheme="twitter" variant="outline">Edit Team</Button>
+                        <Button alignSelf="flex-end" colorScheme="twitter" variant="outline" onClick={onOpen}>Edit Team</Button>
                     </Flex>
                 </Box>
+                <EditTeam isOpen={isOpen} onClose={onClose} team={team} />
                 <Container maxW="60vw" padding="0">
                     <Flex alignItems="center">
                         <Heading fontSize="1.5rem">{team}</Heading>

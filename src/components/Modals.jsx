@@ -283,3 +283,38 @@ export const EditPlayer = ({ isOpen, onClose, player }) => {
         </Modal>
     )
 }
+
+export const EditTeam = ({ isOpen, onClose, team }) => {
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Edit Team</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <FormControl>
+                        <FormLabel>Edit Name</FormLabel>
+                        <Input value={team} />
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Change Cover</FormLabel>
+                        <Select>
+                            {champions.map((champ, i) => {
+                                return <option key={i} value={champ}>{champ}</option>
+                            })}
+                        </Select>
+                    </FormControl>
+                </ModalBody>
+                <ModalFooter display="flex" justifyContent="space-between">
+                    <Button colorScheme="red" mr={3}>Delete Team</Button>
+                    <Box>
+                        <Button onClick={onClose} mr={3}>Cancel</Button>
+                        <Button colorScheme="twitter">
+                            Save
+                        </Button>
+                    </Box>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}

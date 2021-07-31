@@ -22,15 +22,17 @@ const TeamStandingAvatar = ({ standing, rank }) => {
     const { colorMode } = useColorMode()
     return (
         <NextLink href={`/team?id=${rank}`}>
-            <Grid alignItems="center" paddingY="1rem" templateColumns="1fr 1fr 1fr 1fr 1fr" justifyItems="center" cursor="pointer" _hover={{
-                background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
-            }}>
-                <Heading fontSize="1.5rem">{rank + 1}</Heading>
-                <Avatar mr="1rem" name={team} bgColor="gray.800" src={logo} />
-                <Heading fontSize="1rem" justifySelf="left">{team}</Heading>
-                <Text>{win}</Text>
-                <Text>{lose}</Text>
-            </Grid>
+            <a style={{textDecoration: 'none'}}>
+                <Grid alignItems="center" paddingY="1rem" templateColumns="1fr 1fr 1fr 1fr 1fr" justifyItems="center" cursor="pointer" _hover={{
+                    background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
+                }}>
+                    <Heading fontSize="1.5rem">{rank + 1}</Heading>
+                    <Avatar mr="1rem" name={team} bgColor="gray.800" src={logo} />
+                    <Heading fontSize="1rem" justifySelf="left">{team}</Heading>
+                    <Text>{win}</Text>
+                    <Text>{lose}</Text>
+                </Grid>
+            </a>
         </NextLink>
     )
 }
