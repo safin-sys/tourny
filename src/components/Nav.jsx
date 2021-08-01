@@ -9,7 +9,7 @@ export const Nav = () => {
     return (
         <Container h="4rem" maxW="75vw">
             <Flex h="100%" alignItems="center" justifyContent="space-between">
-                <NextLink href="/"><Heading as="h3" fontSize="1.5rem" fontWeight="normal" fontFamily="Pacifico" cursor="pointer">Tourny</Heading></NextLink>
+                <NextLink href="/"><a><Heading as="h3" fontSize="1.5rem" fontWeight="normal" fontFamily="Pacifico" cursor="pointer">Tourny</Heading></a></NextLink>
                 <NavLinks />
             </Flex>
         </Container>

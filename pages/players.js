@@ -2,10 +2,11 @@ import { Container, Heading, Grid } from "@chakra-ui/layout"
 import { Avatar, Button, Flex, useDisclosure } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import Head from 'next/head'
-import { EditPlayer } from "../src/components/Modals"
+import { EditPlayer, MVP } from "../src/components/Modals"
 
 export default function PlayersPage() {
     const [users, setUsers] = useState()
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     useEffect(() => {
         const getUsers = async () => {
@@ -22,7 +23,11 @@ export default function PlayersPage() {
                 <title>Players | Tourny</title>
             </Head>
             <Container maxW="75vw" mt="1rem">
-                <Heading fontSize="1.5rem">Our Players</Heading>
+                <Flex justifyContent="space-between" alignItems="center">
+                    <Heading fontSize="1.5rem">Our Players</Heading>
+                    <Button onClick={onOpen} colorScheme="twitter">MVP of The Week</Button>
+                </Flex>
+                <MVP isOpen={isOpen} onClose={onClose} />
                 {users?.map((user, i) => {
                     return <Player key={i} player={user} />
                 })}

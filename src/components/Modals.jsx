@@ -23,6 +23,8 @@ import dayjs from "dayjs"
 
 const champions = ['Katarina', 'Gwen', 'Jhin']
 const teams = ['Afreeca Freeks', 'Dragon X', 'DAMWON KIA', 'Fredit BRION', 'Gen.G', 'Hanwha Life', 'KT Rolster', 'Liiv SANDBOX', 'Nongshim RedForce', 'T1', 'Fnatic', 'G2']
+const roles = ['Top', 'Jungle', 'Mid', 'ADC', 'Support', 'Substitute']
+const players = ['Wunder', 'Jankos', 'Caps', 'Perkz', 'Rekkless', 'Mikyx']
 
 export const CreateTournamentModal = ({ isOpen, onClose }) => {
     return (
@@ -330,7 +332,7 @@ export const EditTeam = ({ isOpen, onClose, team }) => {
                         <FormLabel>Select Captain</FormLabel>
                         <Select placeholder="Select Captain">
                             {members.map((member, i) => {
-                                if(member.name) {
+                                if (member.name) {
                                     return <option key={i} value={member.name}>{member.name}</option>
                                 } else {
                                     return <option key={i} value={null}>No Player</option>
@@ -365,8 +367,6 @@ const CreatMembers = ({ members, setMembers, index }) => {
         newMember.splice(index, 1)
         setMembers(newMember)
     }
-    const roles = ['Top', 'Jungle', 'Mid', 'ADC', 'Support', 'Substitute']
-    const players = ['Wunder', 'Jankos', 'Caps', 'Perkz', 'Rekkless', 'Mikyx']
     return (
         <Flex alignItems="center" mt={4}>
             <Flex justifyContent="space-between" w="100%">
@@ -383,5 +383,61 @@ const CreatMembers = ({ members, setMembers, index }) => {
             </Flex>
             <Button ml="1rem" colorScheme="red" onClick={handleDelete}>Delete</Button>
         </Flex>
+    )
+}
+
+export const MVP = ({ isOpen, onClose }) => {
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>MVP of The Week</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <FormControl>
+                        <FormLabel>Select MVP</FormLabel>
+                        <Select placeholder="Select MVP">
+                            {players.map((player, i) => {
+                                return <option key={i} value={player}>{player}</option>
+                            })}
+                        </Select>
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>MVP K/D/A</FormLabel>
+                        <Input type="text" required placeholder="e.g. 14/5/9" />
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Select Champion</FormLabel>
+                        <Select placeholder="Select Champion">
+                            {champions.map((player, i) => {
+                                return <option key={i} value={player}>{player}</option>
+                            })}
+                        </Select>
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Select The Match</FormLabel>
+                        <Flex justifyContent="space-between">
+                            <Input type="date" required mr="1rem" />
+                            <Select placeholder="Select Team 1" mr="1rem">
+                                {teams.map((team, i) => {
+                                    return <option key={i} value={team}>{team}</option>
+                                })}
+                            </Select>
+                            <Select placeholder="Select Team 2">
+                                {teams.map((team, i) => {
+                                    return <option key={i} value={team}>{team}</option>
+                                })}
+                            </Select>
+                        </Flex>
+                    </FormControl>
+                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={onClose} mr={3}>Cancel</Button>
+                    <Button colorScheme="twitter">
+                        Save
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     )
 }
