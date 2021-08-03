@@ -33,9 +33,9 @@ export default function Teams() {
                 <Container maxW="75vw" marginY="2rem" padding="0" display="grid" gridTemplateColumns="1fr 1fr" gridGap="0 1rem">
                     {teams?.map((team, i) => {
                         return (
-                            <Flex alignItems="center">
+                            <Flex key={i} alignItems="center">
                                 <Box flexGrow="1">
-                                    <NextLink key={i} href={'/teams/team?id=' + team.name}>
+                                    <NextLink href={'/teams/team?id=' + team.name}>
                                         <a>
                                             <Flex p="1rem" alignItems="center" _hover={{
                                                 background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
