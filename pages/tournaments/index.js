@@ -36,7 +36,7 @@ export default function Tournaments() {
                     <Button colorScheme="twitter" onClick={onOpen}>Create Tournament</Button>
                 </Flex>
                 {list?.map((item, i) => {
-                    return <NextLink key={i} href={'/ts/t?id=' + i}>
+                    return <NextLink key={i} href={'/tournaments/tournament?id=' + i}>
                         <Container maxW="75vw" marginY="2rem" padding="0" cursor="pointer">
                             <Banner champion={item.champion} tournamentName={item.name} date={item.date} />
                         </Container>

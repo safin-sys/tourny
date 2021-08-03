@@ -2,7 +2,7 @@ import { Container, Heading, Grid } from "@chakra-ui/layout"
 import { Avatar, Button, Flex, useDisclosure } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import Head from 'next/head'
-import { EditPlayer, MVP } from "../src/components/Modals"
+import { EditPlayer, MVP } from "../../src/components/Modals"
 
 export default function PlayersPage() {
     const [users, setUsers] = useState()

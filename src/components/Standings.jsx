@@ -21,7 +21,7 @@ const TeamStandingAvatar = ({ standing, rank }) => {
     const { team, logo, win, lose } = standing
     const { colorMode } = useColorMode()
     return (
-        <NextLink href={`/team?id=${rank}`}>
+        <NextLink href={`/teams/team?id=${rank}`}>
             <a style={{textDecoration: 'none'}}>
                 <Grid alignItems="center" paddingY="1rem" templateColumns="1fr 1fr 1fr 1fr 1fr" justifyItems="center" cursor="pointer" _hover={{
                     background: `${colorMode === "light" ? "gray.200" : "gray.900"}`

@@ -60,7 +60,7 @@ const LoggedInLinks = () => {
     return (
         <>
             <NextLink href="/"><a>Home</a></NextLink>
-            <NextLink href="/ts"><a>Tournaments</a></NextLink>
+            <NextLink href="/tournaments"><a>Tournaments</a></NextLink>
             <NextLink href="/players"><a>Players</a></NextLink>
         </>
     )

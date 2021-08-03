@@ -1,10 +1,10 @@
 import { Avatar, Box, Button, Container, Flex, Grid, Heading, Text, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router"
-import { Banner } from "../src/components/Banner";
+import { Banner } from "../../src/components/Banner";
 import Head from "next/head"
-import TeamMembers from "../src/components/TeamMembers";
-import { Schedule } from "../src/components/Schedule"
-import { EditTeam } from "../src/components/Modals";
+import TeamMembers from "../../src/components/TeamMembers";
+import { Schedule } from "../../src/components/Schedule"
+import { EditTeam } from "../../src/components/Modals";
 
 const standings = [
     { team: 'Astralis', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FAST-FullonDark.png', win: '5', lose: '6' },
