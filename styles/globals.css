@@ -17,6 +17,6 @@ a {
   margin-right: 1.5rem;
 }
 
-a:hover {
+.nav-links a:hover {
   text-decoration: underline;
 }

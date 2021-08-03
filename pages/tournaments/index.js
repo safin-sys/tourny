@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { Banner } from "../../src/components/Banner"
-import { Flex, Container, Heading, Grid } from "@chakra-ui/layout"
+import { Flex, Container, Heading } from "@chakra-ui/layout"
 import NextLink from "next/link"
 import { Button, useDisclosure } from "@chakra-ui/react"
 import { CreateTournamentModal } from "../../src/components/Modals"

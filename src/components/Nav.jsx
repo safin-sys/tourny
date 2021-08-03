@@ -61,6 +61,7 @@ const LoggedInLinks = () => {
         <>
             <NextLink href="/"><a>Home</a></NextLink>
             <NextLink href="/tournaments"><a>Tournaments</a></NextLink>
+            <NextLink href="/teams"><a>Teams</a></NextLink>
             <NextLink href="/players"><a>Players</a></NextLink>
         </>
     )
