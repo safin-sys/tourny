@@ -1,8 +1,8 @@
 import Head from "next/head"
 import { Flex, Container, Heading } from "@chakra-ui/layout"
 import NextLink from "next/link"
-import { Avatar, Box, Button, useColorMode, useDisclosure } from "@chakra-ui/react"
-import { CreateTournamentModal } from "../../src/components/Modals"
+import { Avatar, Button, useColorMode, useDisclosure } from "@chakra-ui/react"
+import { CreateTeam } from "../../src/components/Modals"
 
 const teams = [
     { name: 'Astralis', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FAST-FullonDark.png', win: '5', lose: '6' },
@@ -33,26 +33,22 @@ export default function Teams() {
                 <Container maxW="75vw" marginY="2rem" padding="0" display="grid" gridTemplateColumns="1fr 1fr" gridGap="0 1rem">
                     {teams?.map((team, i) => {
                         return (
-                            <Flex key={i} alignItems="center">
-                                <Box flexGrow="1">
-                                    <NextLink href={'/teams/team?id=' + team.name}>
-                                        <a>
-                                            <Flex p="1rem" alignItems="center" _hover={{
-                                                background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
-                                            }}>
-                                                <Avatar name={team.name} mr="1.5rem" src={team.logo} bgColor="gray.800" />
-                                                <Heading fontSize="1rem" textDecoration="none">{team.name}</Heading>
-                                            </Flex>
-                                        </a>
-                                    </NextLink>
-                                </Box>
-                                <Button>Edit</Button>
-                            </Flex>
+                            <NextLink key={i} href={'/teams/team?id=' + team.name}>
+                                <a>
+                                    <Flex p="1rem" alignItems="center" _hover={{
+                                        background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
+                                    }}>
+                                        <Avatar name={team.name} mr="1.5rem" src={team.logo} bgColor="gray.800" />
+                                        <Heading fontSize="1rem" textDecoration="none">{team.name}</Heading>
+                                    </Flex>
+                                </a>
+                            </NextLink>
+
                         )
                     })}
                 </Container>
             </Container >
-            <CreateTournamentModal isOpen={isOpen} onClose={onClose} />
+            <CreateTeam isOpen={isOpen} onClose={onClose} />
         </>
     )
 }

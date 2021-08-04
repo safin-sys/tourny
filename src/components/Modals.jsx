@@ -334,7 +334,7 @@ export const EditTeam = ({ isOpen, onClose, team }) => {
                             {members.map((member, i) => {
                                 if (member.name) {
                                     return <option key={i} value={member.name}>{member.name}</option>
-                                } else {
+                                } else if (members.length === 0) {
                                     return <option key={i} value={null}>No Player</option>
                                 }
                             })}
@@ -436,6 +436,72 @@ export const MVP = ({ isOpen, onClose }) => {
                     <Button colorScheme="twitter">
                         Save
                     </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+export const CreateTeam = ({ isOpen, onClose }) => {
+    const member = {
+        name: undefined,
+        role: undefined,
+        captain: false
+    }
+    const [members, setMembers] = useState([member])
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Edit Team</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Flex>
+                        <FormControl mr="1rem">
+                            <FormLabel>Edit Name</FormLabel>
+                            <Input />
+                        </FormControl>
+                        <FormControl w="auto">
+                            <FormLabel>Change Logo</FormLabel>
+                            <Button>
+                                Click to Upload
+                                <Input type="file" hidden />
+                            </Button>
+                        </FormControl>
+                    </Flex>
+                    <FormControl mt={4}>
+                        <FormLabel>Change Cover</FormLabel>
+                        <Select>
+                            {champions.map((champ, i) => {
+                                return <option key={i} value={champ}>{champ}</option>
+                            })}
+                        </Select>
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Add Members</FormLabel>
+                        {members.map((match, i) => {
+                            return <CreatMembers key={i} index={i} members={members} setMembers={setMembers} />
+                        })}
+                    </FormControl>
+                    <Button mt={4} onClick={() => setMembers(members => [...members, member])}>Add More Players</Button>
+                    <FormControl mt={4}>
+                        <FormLabel>Select Captain</FormLabel>
+                        <Select placeholder="Select Captain">
+                            {members.map((member, i) => {
+                                if (member.name) {
+                                    return <option key={i} value={member.name}>{member.name}</option>
+                                } else if (members.length === 0) {
+                                    return <option key={i} value={null}>No Player</option>
+                                }
+                            })}
+                        </Select>
+                    </FormControl>
+                </ModalBody>
+                <ModalFooter>
+                        <Button onClick={onClose} mr={3}>Cancel</Button>
+                        <Button colorScheme="twitter">
+                            Save
+                        </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
