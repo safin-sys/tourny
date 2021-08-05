@@ -498,10 +498,63 @@ export const CreateTeam = ({ isOpen, onClose }) => {
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>
-                        <Button onClick={onClose} mr={3}>Cancel</Button>
-                        <Button colorScheme="twitter">
-                            Save
-                        </Button>
+                    <Button onClick={onClose} mr={3}>Cancel</Button>
+                    <Button colorScheme="twitter">
+                        Save
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+export const EditProfile = ({ isOpen, onClose }) => {
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Edit Profile</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Flex>
+                        <FormControl mr="1rem">
+                            <FormLabel>Edit Name</FormLabel>
+                            <Input />
+                        </FormControl>
+                        <FormControl w="auto">
+                            <FormLabel>Change Logo</FormLabel>
+                            <Button>
+                                Click to Upload
+                                <Input type="file" hidden />
+                            </Button>
+                        </FormControl>
+                    </Flex>
+                    <FormControl mt={4}>
+                        <FormLabel>Change Cover</FormLabel>
+                        <Select>
+                            {champions.map((champ, i) => {
+                                return <option key={i} value={champ}>{champ}</option>
+                            })}
+                        </Select>
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Edit Facebook</FormLabel>
+                        <Input />
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Edit Email</FormLabel>
+                        <Input type="email" />
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Edit Phone</FormLabel>
+                        <Input type="phone" />
+                    </FormControl>
+                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={onClose} mr={3}>Cancel</Button>
+                    <Button colorScheme="twitter">
+                        Save
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
