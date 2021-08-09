@@ -14,12 +14,14 @@ import {
     Avatar,
     Heading,
     Box,
+    useToast,
 } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
 import { Grid } from "@chakra-ui/layout"
 import { useState } from "react"
 import dayjs from "dayjs"
+import { auth } from "../helper/base"
 
 const champions = ['Katarina', 'Gwen', 'Jhin']
 const teams = ['Afreeca Freeks', 'Dragon X', 'DAMWON KIA', 'Fredit BRION', 'Gen.G', 'Hanwha Life', 'KT Rolster', 'Liiv SANDBOX', 'Nongshim RedForce', 'T1', 'Fnatic', 'G2']
@@ -216,8 +218,34 @@ export const EditDate = ({ isOpen, onClose, matchDate }) => {
 }
 
 export const ForgotPassword = ({ isOpen, onClose }) => {
+    const [email, setEmail] = useState('')
+    const toast = useToast()
+    const sendVerificationEmail = () => {
+        auth.sendPasswordResetEmail(email)
+            .then(() => {
+                toast({
+                    title: "Password Recovery Email Sent.",
+                    description: "Check your email address for a recovery email.",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+            })
+            .catch(err => {
+                console.log(err);
+                toast({
+                    title: "Password Recovery Email Sending Failed.",
+                    description: err.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+            })
+    }
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Password Recovery</ModalHeader>
@@ -225,12 +253,12 @@ export const ForgotPassword = ({ isOpen, onClose }) => {
                 <ModalBody>
                     <FormControl>
                         <FormLabel>Enter Your Email</FormLabel>
-                        <Input type="email" required />
+                        <Input type="email" required onChange={e => setEmail(e.target.value)} />
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={onClose} mr={3}>Cancel</Button>
-                    <Button colorScheme="twitter">
+                    <Button colorScheme="twitter" onClick={sendVerificationEmail}>
                         Send Verification Email
                     </Button>
                 </ModalFooter>

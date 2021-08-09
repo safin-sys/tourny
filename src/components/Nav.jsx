@@ -1,9 +1,11 @@
 import { Container, Flex, Link } from "@chakra-ui/layout"
-import { Avatar, Heading, MenuItem, Switch } from "@chakra-ui/react"
+import { Avatar, Heading, MenuItem, Switch, useToast } from "@chakra-ui/react"
 import { useColorMode } from "@chakra-ui/color-mode"
 import { Menu, MenuButton, MenuList, MenuDivider } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import NextLink from 'next/link'
+import { useAuthState } from "react-firebase-hooks/auth"
+import { auth } from "../helper/base"
 
 export const Nav = () => {
     return (
@@ -17,19 +19,30 @@ export const Nav = () => {
 }
 
 const NavLinks = () => {
-    const isLoggedIn = true
+    const [user] = useAuthState(auth)
     return (
         <Flex className="nav-links" alignItems="center" justifyContent="space-between" fontWeight="medium">
-            {/* {isLoggedIn ? <LoggedInLinks /> : <LoggedOutLinks />} */}
-            <LoggedInLinks />
-            <LoggedOutLinks />
-            <NavAvatar />
+            {user ? <LoggedInLinks /> : <LoggedOutLinks />}
         </Flex>
     )
 }
 
 const NavAvatar = () => {
     const { colorMode, toggleColorMode } = useColorMode()
+    const toast = useToast()
+    const signOut = () => {
+        auth.signOut()
+            .then(() => {
+                toast({
+                    title: "Successfully Logged Out",
+                    description: "You are logged out of your account.",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+            })
+    }
     return (
         <Menu closeOnSelect={false}>
             <MenuButton>
@@ -49,7 +62,7 @@ const NavAvatar = () => {
                         </FormControl>
                     </MenuItem>
                     <MenuDivider />
-                    <MenuItem fontWeight="bold" color="red.400">Logout</MenuItem>
+                    <MenuItem fontWeight="bold" color="red.400" onClick={signOut}>Logout</MenuItem>
                 </Container>
             </MenuList>
         </Menu>
@@ -63,6 +76,7 @@ const LoggedInLinks = () => {
             <NextLink href="/tournaments"><a>Tournaments</a></NextLink>
             <NextLink href="/teams"><a>Teams</a></NextLink>
             <NextLink href="/players"><a>Players</a></NextLink>
+            <NavAvatar />
         </>
     )
 }
