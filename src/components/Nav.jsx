@@ -29,6 +29,8 @@ const NavLinks = () => {
 
 const NavAvatar = () => {
     const { colorMode, toggleColorMode } = useColorMode()
+    const [user] = useAuthState(auth)
+    const { displayName, uid } = user
     const toast = useToast()
     const signOut = () => {
         auth.signOut()
@@ -46,11 +48,15 @@ const NavAvatar = () => {
     return (
         <Menu closeOnSelect={false}>
             <MenuButton>
-                <Avatar name="SafinTheShip" src="https://preview.redd.it/5u3cchijozt21.png?auto=webp&s=7cb29beb9c5c9e1dec7a0bd7d782d2242806e2ee" />
+                <Avatar name={displayName} src="https://preview.redd.it/5u3cchijozt21.png?auto=webp&s=7cb29beb9c5c9e1dec7a0bd7d782d2242806e2ee" />
             </MenuButton>
             <MenuList minWidth="240px">
                 <Container display="flex" flexDirection="column">
-                    <MenuItem fontWeight="bold">SafinTheShip</MenuItem>
+                    <NextLink href={`/players/player?id=${uid}`}>
+                        <a style={{textDecoration: "none"}}>
+                            <MenuItem fontWeight="bold">{displayName}</MenuItem>
+                        </a>
+                    </NextLink>
                     <MenuItem fontWeight="bold">Your Matches</MenuItem>
                     <MenuDivider />
                     <MenuItem>
