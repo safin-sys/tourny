@@ -19,7 +19,7 @@ import {
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
 import { Grid } from "@chakra-ui/layout"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import dayjs from "dayjs"
 import { auth } from "../helper/base"
 
@@ -536,7 +536,23 @@ export const CreateTeam = ({ isOpen, onClose }) => {
     )
 }
 
-export const EditProfile = ({ isOpen, onClose }) => {
+export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer }) => {
+    const [username, setUsername] = useState('')
+    const [champion, setChampion] = useState('')
+    const [FB, setFB] = useState('')
+    const [phone, setPhone] = useState('')
+    const [upload, setUpload] = useState('')
+    const editedProfile = {
+        username,
+        champion,
+        fb: FB,
+        phone,
+        upload
+    }
+    const hiddenInput = useRef()
+    const handleUpload = () => {
+        setUpload(hiddenInput.current?.files)
+    }
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
@@ -547,19 +563,19 @@ export const EditProfile = ({ isOpen, onClose }) => {
                     <Flex>
                         <FormControl mr="1rem">
                             <FormLabel>Edit Name</FormLabel>
-                            <Input />
+                            <Input placeholder={player?.username} onChange={e => setUsername(e.target.value)} />
                         </FormControl>
                         <FormControl w="auto">
-                            <FormLabel>Change Logo</FormLabel>
-                            <Button>
-                                Click to Upload
-                                <Input type="file" hidden />
+                            <FormLabel>Change DP</FormLabel>
+                            <Button onClick={() => hiddenInput.current.click()} colorScheme={upload ? "green" : undefined} minW="9rem" maxW="10ch" overflow="hidden">
+                                {upload ? upload[0].name : "Click to Upload"}
+                                <Input ref={hiddenInput} accept="image/*" type="file" hidden onChange={handleUpload} />
                             </Button>
                         </FormControl>
                     </Flex>
                     <FormControl mt={4}>
                         <FormLabel>Change Cover</FormLabel>
-                        <Select>
+                        <Select onChange={e => setChampion(e.target.value)}>
                             {champions.map((champ, i) => {
                                 return <option key={i} value={champ}>{champ}</option>
                             })}
@@ -567,20 +583,16 @@ export const EditProfile = ({ isOpen, onClose }) => {
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Edit Facebook</FormLabel>
-                        <Input />
-                    </FormControl>
-                    <FormControl mt={4}>
-                        <FormLabel>Edit Email</FormLabel>
-                        <Input type="email" />
+                        <Input placeholder={player?.fb} onChange={e => setFB(e.target.value)} />
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Edit Phone</FormLabel>
-                        <Input type="phone" />
+                        <Input placeholder={player?.phone} type="phone" onChange={e => setPhone(e.target.value)} />
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={onClose} mr={3}>Cancel</Button>
-                    <Button colorScheme="twitter">
+                    <Button colorScheme="twitter" onClick={() => handleEditPlayer(editedProfile)}>
                         Save
                     </Button>
                 </ModalFooter>

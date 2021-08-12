@@ -32,13 +32,22 @@ const SignedOut = () => {
         auth.createUserWithEmailAndPassword(email, password)
             .then(userCredential => {
                 console.log(userCredential.user.email)
-                
-                userCredential.user.updateProfile({displayName: username})
+
+                userCredential.user.updateProfile({ displayName: username })
                     .then(() => console.log("Username Update Success"))
                     .catch(err => console.log("Username Update Failed :", err))
 
-                db.collection("players").doc(userCredential.user.uid).set({ username })
-                
+                db.collection("players").doc(userCredential.user.uid).set({
+                    username,
+                    logo: null,
+                    team: null,
+                    role: null,
+                    captain: false,
+                    fb: null,
+                    phone: null,
+                    email: userCredential.user.email,
+                })
+
                 toast({
                     title: "Account created.",
                     description: "We've created your account for you.",
@@ -65,7 +74,7 @@ const SignedOut = () => {
         <Container maxW="75vw" display="flex" alignItems="center" h="calc(100vh - 128px)">
             <Container maxW="400px" mb="2rem">
                 <Heading fontSize="1.5rem" mb="1rem" textAlign="center">Register</Heading>
-                <FormControl id="email">
+                <FormControl>
                     <FormLabel display="flex" alignItems="center">
                         Username
                         <Tooltip hasArrow label="The name you use in-game" placement="right">
@@ -76,7 +85,7 @@ const SignedOut = () => {
                     </FormLabel>
                     <Input placeholder="Enter username" onChange={e => setUsername(e.target.value)} />
                 </FormControl>
-                <FormControl id="email" mt={4}>
+                <FormControl mt={4}>
                     <FormLabel>Email</FormLabel>
                     <Input type="email" placeholder="Enter email" onChange={e => setEmail(e.target.value)} />
                 </FormControl>

@@ -1,10 +1,14 @@
-import { Avatar, Box, Button, Container, Flex, Grid, Heading, Text, useColorMode, useDisclosure } from "@chakra-ui/react";
+import { Avatar, Box, Button, Container, Flex, Grid, Heading, Spinner, Text, useColorMode, useDisclosure, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router"
 import { Banner } from "../../src/components/Banner";
 import Head from "next/head"
 import TeamMembers from "../../src/components/TeamMembers";
 import { Schedule } from "../../src/components/Schedule"
 import { EditProfile } from "../../src/components/Modals";
+import { auth, db, stg } from "../../src/helper/base";
+import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
+import { useDownloadURL } from "react-firebase-hooks/storage"
+import { useAuthState } from "react-firebase-hooks/auth"
 
 const player = {
     name: 'Tyler1',
@@ -127,35 +131,70 @@ const matchDates = [
     },
 ]
 
-export default function PlayerPage() {
+export default function Player() {
     const router = useRouter()
     const { id } = router.query
-    const { name, logo, team, role, captain, email, phone } = player
+
+    const [value] = useDocumentDataOnce(db.collection('players').doc(id))
+    return (
+        value ? <PlayerPage value={value} id={id} /> : 
+        <Grid height="calc(100vh - 128px)" placeContent="center">
+            <Spinner size="xl" />
+        </Grid>
+    )
+}
+
+function PlayerPage({ value, id }) {
+    const { username, logo, team, role, captain, phone, fb, email } = value
+
+    const [user] = useAuthState(auth)
+    const toast = useToast()
+    const handleEditProfile = (e) => {
+        const { username, fb, champion, phone, upload } = e
+        const fucklife = {
+            ...(username ? { username } : {}),
+            ...(fb ? { fb } : {}),
+            ...(champion ? { champion } : {}),
+            ...(phone ? { phone } : {}),
+        }
+        const stgRefUpdate = stg.child(`dp/${user.uid}`)
+        upload && stgRefUpdate.put(upload[0])
+            .then(() => {
+                toast({
+                    title: "DP Changed.",
+                    description: "We've updated your DP for you.",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+            })
+        db.collection("players").doc(user.uid).update(fucklife)
+    }
+
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [downloadUrl] = useDownloadURL(stg.child(`dp/${id}`));
     return (
         <>
             <Head>
-                <title>{name} | Tourny</title>
+                <title>{username} | Tourny</title>
             </Head>
             <Container maxW="75vw" display="flex" flexDirection="column">
                 <Box pos="relative" mb="3rem">
                     <Banner mt="1rem" champion="Lux" skin="15" offset="8" />
                     <Flex w="60vw" alignItems="center" justifyContent="space-between" pos="absolute" top="75%" left="0" right="0" mx="auto">
-                        <Avatar border="2px #111 solid" size="xl" name={name} src={logo} bgColor="gray.800" />
+                        <Avatar border="2px #111 solid" size="xl" name={username} src={downloadUrl} bgColor="gray.800" />
                         <Button alignSelf="flex-end" colorScheme="twitter" variant="outline" onClick={onOpen}>Edit Profile</Button>
                     </Flex>
                 </Box>
-                <EditProfile isOpen={isOpen} onClose={onClose} />
+                <EditProfile isOpen={isOpen} onClose={onClose} player={value} handleEditPlayer={handleEditProfile} />
                 <Container maxW="60vw" padding="0">
-                    <Heading fontSize="1.5rem">{name}</Heading>
+                    <Heading fontSize="1.5rem">{username}</Heading>
                     <Flex mt={2}>
-                        <Text mr={2}>{role}{captain ? '/Captain' : ''}</Text>
-                        <Text mr={2}>-</Text>
-                        <Text mr={2}>fb/tyler1</Text>
-                        <Text mr={2}>-</Text>
-                        <Text mr={2}>{email}</Text>
-                        <Text mr={2}>-</Text>
-                        <Text mr={2}>{phone}</Text>
+                        {role && <Text mr={2}>{role}{captain ? '/Captain' : ''} -</Text>}
+                        {fb && <Text mr={2}>{fb} -</Text>}
+                        {email && <Text mr={2}>{email} -</Text>}
+                        {phone && <Text mr={2}>{phone}</Text>}
                     </Flex>
                 </Container>
                 <Grid templateColumns=".5fr 1fr" mt={8} textAlign="center">
