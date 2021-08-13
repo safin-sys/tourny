@@ -10,16 +10,6 @@ import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 import { useDownloadURL } from "react-firebase-hooks/storage"
 import { useAuthState } from "react-firebase-hooks/auth"
 
-const player = {
-    name: 'Tyler1',
-    logo: 'https://scontent-del1-1.xx.fbcdn.net/v/t1.18169-9/20664503_217017485493222_9033074246486805287_n.jpg?_nc_cat=103&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeHmcytccysf1Nf9umI-hx172_rpF16zL9Pb-ukXXrMv03_ddVF3K6Pf8Qaz3VRIsEA5eUr-POqvfFFusHutxypH&_nc_ohc=yKeV775FQ4IAX9Nh69G&_nc_ht=scontent-del1-1.xx&oh=699d574d4f284d3ccf5b9d9150a8b792&oe=613064C1',
-    team: 'Meme Team',
-    role: 'ADC',
-    captain: true,
-    email: 'tyler1@hotmail.com',
-    phone: '+880 171-0110001'
-}
-
 const matchDates = [
     {
         date: '24 June',
@@ -145,7 +135,7 @@ export default function Player() {
 }
 
 function PlayerPage({ value, id }) {
-    const { username, logo, team, role, captain, phone, fb, email } = value
+    const { username, team, role, captain, phone, fb, email } = value
 
     const [user] = useAuthState(auth)
     const toast = useToast()

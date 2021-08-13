@@ -5,7 +5,8 @@ import { Menu, MenuButton, MenuList, MenuDivider } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import NextLink from 'next/link'
 import { useAuthState } from "react-firebase-hooks/auth"
-import { auth } from "../helper/base"
+import { auth, stg } from "../helper/base"
+import { useDownloadURL } from "react-firebase-hooks/storage"
 
 export const Nav = () => {
     return (
@@ -30,7 +31,8 @@ const NavLinks = () => {
 const NavAvatar = () => {
     const { colorMode, toggleColorMode } = useColorMode()
     const [user] = useAuthState(auth)
-    const { displayName, uid, photoURL } = user
+    const { displayName, uid } = user
+    const [downloadUrl] = useDownloadURL(stg.child(`dp/${uid}`));
     const toast = useToast()
     const signOut = () => {
         auth.signOut()
@@ -48,7 +50,7 @@ const NavAvatar = () => {
     return (
         <Menu closeOnSelect={false}>
             <MenuButton>
-                <Avatar name={displayName} src={photoURL} />
+                <Avatar name={displayName} src={downloadUrl} />
             </MenuButton>
             <MenuList minWidth="240px">
                 <Container display="flex" flexDirection="column">
