@@ -31,7 +31,6 @@ const SignedOut = () => {
     const login = () => {
         auth.signInWithEmailAndPassword(email, password)
             .then(userCredential => {
-                console.log(userCredential.user.email)
                 toast({
                     title: "Login Successful.",
                     description: "You've successfully logged on to your account.",

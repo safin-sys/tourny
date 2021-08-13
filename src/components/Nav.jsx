@@ -7,6 +7,7 @@ import NextLink from 'next/link'
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth, stg } from "../helper/base"
 import { useDownloadURL } from "react-firebase-hooks/storage"
+import { useRouter } from "next/router"
 
 export const Nav = () => {
     return (
@@ -29,6 +30,7 @@ const NavLinks = () => {
 }
 
 const NavAvatar = () => {
+    const router = useRouter()
     const { colorMode, toggleColorMode } = useColorMode()
     const [user] = useAuthState(auth)
     const { displayName, uid } = user
@@ -45,6 +47,7 @@ const NavAvatar = () => {
                     isClosable: true,
                     position: "bottom-left"
                 })
+                router.push('/')
             })
     }
     return (

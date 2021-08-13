@@ -39,9 +39,6 @@ const SignedOut = () => {
 
                 db.collection("players").doc(userCredential.user.uid).set({
                     username,
-                    logo: null,
-                    team: null,
-                    role: null,
                     captain: false,
                     fb: null,
                     phone: null,

@@ -15,13 +15,15 @@ import {
     Heading,
     Box,
     useToast,
+    useDisclosure,
 } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
 import { Grid } from "@chakra-ui/layout"
 import { useRef, useState } from "react"
 import dayjs from "dayjs"
-import { auth } from "../helper/base"
+import { auth, db } from "../helper/base"
+import { useRouter } from "next/router"
 
 const champions = ['Katarina', 'Gwen', 'Jhin']
 const teams = ['Afreeca Freeks', 'Dragon X', 'DAMWON KIA', 'Fredit BRION', 'Gen.G', 'Hanwha Life', 'KT Rolster', 'Liiv SANDBOX', 'Nongshim RedForce', 'T1', 'Fnatic', 'G2']
@@ -553,6 +555,39 @@ export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer }) => {
     const handleUpload = () => {
         setUpload(hiddenInput.current?.files)
     }
+    const { isOpen: isYouOpen, onOpen: onYouOpen, onClose: onYouClose } = useDisclosure()
+    const toast = useToast()
+    const router = useRouter()
+    const handleDeleteProfile = () => {
+        auth.currentUser.delete()
+            .then(() => {
+                toast({
+                    title: "Profile deleted.",
+                    description: "We've deleted your profile for you.",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+                router.push("/")
+            })
+            .catch(err => {
+                console.log(err);
+                toast({
+                    title: "Profile not deleted.",
+                    description: err.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+            })
+    }
+
+    const handleEdit = () => {
+        handleEditPlayer(editedProfile)
+        onClose()
+    }
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
@@ -590,10 +625,36 @@ export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer }) => {
                         <Input placeholder={player?.phone} type="phone" onChange={e => setPhone(e.target.value)} />
                     </FormControl>
                 </ModalBody>
+                <ModalFooter display="flex" justifyContent="space-between">
+                    <Button colorScheme="red" onClick={onYouOpen}>Delete Profile</Button>
+                    <AreYouSure isYouOpen={isYouOpen} onYouClose={onYouClose} externalFunction={handleDeleteProfile} />
+                    <Box>
+                        <Button onClick={onClose} mr={3}>Cancel</Button>
+                        <Button colorScheme="twitter" onClick={handleEdit}>
+                            Save
+                        </Button>
+                    </Box>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+const AreYouSure = ({ isYouOpen, onYouClose, externalFunction }) => {
+    const handleCloseAndExternalFunction = () => {
+        externalFunction()
+        onYouClose()
+    }
+    return (
+        <Modal isOpen={isYouOpen} onClose={onYouClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Are you sure you want to do this?</ModalHeader>
+                <ModalCloseButton />
                 <ModalFooter>
-                    <Button onClick={onClose} mr={3}>Cancel</Button>
-                    <Button colorScheme="twitter" onClick={() => handleEditPlayer(editedProfile)}>
-                        Save
+                    <Button onClick={handleCloseAndExternalFunction} mr={3} colorScheme="red">Yes</Button>
+                    <Button colorScheme="twitter">
+                        No
                     </Button>
                 </ModalFooter>
             </ModalContent>

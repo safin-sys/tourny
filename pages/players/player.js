@@ -6,7 +6,7 @@ import TeamMembers from "../../src/components/TeamMembers";
 import { Schedule } from "../../src/components/Schedule"
 import { EditProfile } from "../../src/components/Modals";
 import { auth, db, stg } from "../../src/helper/base";
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
+import { useDocumentData } from "react-firebase-hooks/firestore"
 import { useDownloadURL } from "react-firebase-hooks/storage"
 import { useAuthState } from "react-firebase-hooks/auth"
 
@@ -125,12 +125,12 @@ export default function Player() {
     const router = useRouter()
     const { id } = router.query
 
-    const [value] = useDocumentDataOnce(db.collection('players').doc(id))
+    const [value] = useDocumentData(db.collection('players').doc(id))
     return (
-        value ? <PlayerPage value={value} id={id} /> : 
-        <Grid height="calc(100vh - 128px)" placeContent="center">
-            <Spinner size="xl" />
-        </Grid>
+        value ? <PlayerPage value={value} id={id} /> :
+            <Grid height="calc(100vh - 128px)" placeContent="center">
+                <Spinner size="xl" />
+            </Grid>
     )
 }
 
@@ -160,6 +160,27 @@ function PlayerPage({ value, id }) {
                 })
             })
         db.collection("players").doc(user.uid).update(fucklife)
+            .then(() => {
+                toast({
+                    title: "Profile edited.",
+                    description: "We've edited your profile for you.",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+            })
+            .catch(err => {
+                console.log(err);
+                toast({
+                    title: "Profile edit failed.",
+                    description: err.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+            })
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -173,8 +194,8 @@ function PlayerPage({ value, id }) {
                 <Box pos="relative" mb="3rem">
                     <Banner mt="1rem" champion="Lux" skin="15" offset="8" />
                     <Flex w="60vw" alignItems="center" justifyContent="space-between" pos="absolute" top="75%" left="0" right="0" mx="auto">
-                        <Avatar border="2px #111 solid" size="xl" name={username} src={downloadUrl} bgColor="gray.800" />
-                        <Button alignSelf="flex-end" colorScheme="twitter" variant="outline" onClick={onOpen}>Edit Profile</Button>
+                        <Avatar border="2px #111 solid" size="xl" name={username} src={downloadUrl} />
+                        {user?.uid === id && <Button alignSelf="flex-end" colorScheme="twitter" variant="outline" onClick={onOpen}>Edit Profile</Button>}
                     </Flex>
                 </Box>
                 <EditProfile isOpen={isOpen} onClose={onClose} player={value} handleEditPlayer={handleEditProfile} />
@@ -182,7 +203,7 @@ function PlayerPage({ value, id }) {
                     <Heading fontSize="1.5rem">{username}</Heading>
                     <Flex mt={2}>
                         {role && <Text mr={2}>{role}{captain ? '/Captain' : ''} -</Text>}
-                        {fb && <Text mr={2}>{fb} -</Text>}
+                        {fb && <Text mr={2}>fb/{fb} -</Text>}
                         {email && <Text mr={2}>{email} -</Text>}
                         {phone && <Text mr={2}>{phone}</Text>}
                     </Flex>
