@@ -24,6 +24,7 @@ import { useRef, useState } from "react"
 import dayjs from "dayjs"
 import { auth, db } from "../helper/base"
 import { useRouter } from "next/router"
+import SelectChampion from "./SelectChampion"
 
 const champions = ['Katarina', 'Gwen', 'Jhin']
 const teams = ['Afreeca Freeks', 'Dragon X', 'DAMWON KIA', 'Fredit BRION', 'Gen.G', 'Hanwha Life', 'KT Rolster', 'Liiv SANDBOX', 'Nongshim RedForce', 'T1', 'Fnatic', 'G2']
@@ -538,18 +539,24 @@ export const CreateTeam = ({ isOpen, onClose }) => {
     )
 }
 
-export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer }) => {
+export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer, selectedChamp, setSelectedChamp, selectedSkin, setSelectedSkin, offset, setOffset }) => {
     const [username, setUsername] = useState('')
     const [champion, setChampion] = useState('')
     const [FB, setFB] = useState('')
     const [phone, setPhone] = useState('')
     const [upload, setUpload] = useState('')
+
     const editedProfile = {
         username,
         champion,
         fb: FB,
         phone,
-        upload
+        upload,
+        cover: {
+            champion: selectedChamp,
+            skin: selectedSkin,
+            offset: offset
+        }
     }
     const hiddenInput = useRef()
     const handleUpload = () => {
@@ -610,11 +617,7 @@ export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer }) => {
                     </Flex>
                     <FormControl mt={4}>
                         <FormLabel>Change Cover</FormLabel>
-                        <Select onChange={e => setChampion(e.target.value)}>
-                            {champions.map((champ, i) => {
-                                return <option key={i} value={champ}>{champ}</option>
-                            })}
-                        </Select>
+                        <SelectChampion selectedChamp={selectedChamp} setSelectedChamp={setSelectedChamp} selectedSkin={selectedSkin} setSelectedSkin={setSelectedSkin} offset={offset} setOffset={setOffset} />
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Edit Facebook</FormLabel>

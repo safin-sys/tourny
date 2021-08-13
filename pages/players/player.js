@@ -9,6 +9,7 @@ import { auth, db, stg } from "../../src/helper/base";
 import { useDocumentData } from "react-firebase-hooks/firestore"
 import { useDownloadURL } from "react-firebase-hooks/storage"
 import { useAuthState } from "react-firebase-hooks/auth"
+import { useState } from "react";
 
 const matchDates = [
     {
@@ -135,17 +136,22 @@ export default function Player() {
 }
 
 function PlayerPage({ value, id }) {
-    const { username, team, role, captain, phone, fb, email } = value
+    const { username, team, role, captain, phone, fb, email, cover } = value
+
+    const [selectedChamp, setSelectedChamp] = useState(cover && cover?.champion)
+    const [selectedSkin, setSelectedSkin] = useState(cover && cover?.skin)
+    const [offset, setOffset] = useState(cover && cover?.offset)
 
     const [user] = useAuthState(auth)
     const toast = useToast()
     const handleEditProfile = (e) => {
-        const { username, fb, champion, phone, upload } = e
+        const { username, fb, champion, phone, upload, cover } = e
         const fucklife = {
             ...(username ? { username } : {}),
             ...(fb ? { fb } : {}),
             ...(champion ? { champion } : {}),
             ...(phone ? { phone } : {}),
+            ...(cover ? { cover } : {})
         }
         const stgRefUpdate = stg.child(`dp/${user.uid}`)
         upload && stgRefUpdate.put(upload[0])
@@ -192,13 +198,13 @@ function PlayerPage({ value, id }) {
             </Head>
             <Container maxW="75vw" display="flex" flexDirection="column">
                 <Box pos="relative" mb="3rem">
-                    <Banner mt="1rem" champion="Lux" skin="15" offset="8" />
+                    <Banner mt="1rem" champion={cover.champion} skin={cover.skin} offset={cover.offset} />
                     <Flex w="60vw" alignItems="center" justifyContent="space-between" pos="absolute" top="75%" left="0" right="0" mx="auto">
-                        <Avatar border="2px #111 solid" size="xl" name={username} src={downloadUrl} />
+                        <Avatar size="xl" name={username} src={downloadUrl} />
                         {user?.uid === id && <Button alignSelf="flex-end" colorScheme="twitter" variant="outline" onClick={onOpen}>Edit Profile</Button>}
                     </Flex>
                 </Box>
-                <EditProfile isOpen={isOpen} onClose={onClose} player={value} handleEditPlayer={handleEditProfile} />
+                <EditProfile isOpen={isOpen} onClose={onClose} player={value} handleEditPlayer={handleEditProfile} selectedChamp={selectedChamp} setSelectedChamp={setSelectedChamp} selectedSkin={selectedSkin} setSelectedSkin={setSelectedSkin} offset={offset} setOffset={setOffset} />
                 <Container maxW="60vw" padding="0">
                     <Heading fontSize="1.5rem">{username}</Heading>
                     <Flex mt={2}>
