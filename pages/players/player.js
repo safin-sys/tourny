@@ -145,13 +145,14 @@ function PlayerPage({ value, id }) {
     const [user] = useAuthState(auth)
     const toast = useToast()
     const handleEditProfile = (e) => {
-        const { username, fb, champion, phone, upload, cover } = e
+        const { username, fb, champion, phone, upload, cover, role } = e
         const fucklife = {
             ...(username ? { username } : {}),
             ...(fb ? { fb } : {}),
             ...(champion ? { champion } : {}),
             ...(phone ? { phone } : {}),
-            ...(cover ? { cover } : {})
+            ...(cover ? { cover } : {}),
+            ...(role ? { role } : {})
         }
         const stgRefUpdate = stg.child(`dp/${user.uid}`)
         upload && stgRefUpdate.put(upload[0])
@@ -198,7 +199,7 @@ function PlayerPage({ value, id }) {
             </Head>
             <Container maxW="75vw" display="flex" flexDirection="column">
                 <Box pos="relative" mb="3rem">
-                    <Banner mt="1rem" champion={cover.champion} skin={cover.skin} offset={cover.offset} />
+                    <Banner mt="1rem" champion={cover && cover?.champion} skin={cover && cover?.skin} offset={cover && cover?.offset} />
                     <Flex w="60vw" alignItems="center" justifyContent="space-between" pos="absolute" top="75%" left="0" right="0" mx="auto">
                         <Avatar size="xl" name={username} src={downloadUrl} />
                         {user?.uid === id && <Button alignSelf="flex-end" colorScheme="twitter" variant="outline" onClick={onOpen}>Edit Profile</Button>}

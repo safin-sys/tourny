@@ -28,7 +28,7 @@ import SelectChampion from "./SelectChampion"
 
 const champions = ['Katarina', 'Gwen', 'Jhin']
 const teams = ['Afreeca Freeks', 'Dragon X', 'DAMWON KIA', 'Fredit BRION', 'Gen.G', 'Hanwha Life', 'KT Rolster', 'Liiv SANDBOX', 'Nongshim RedForce', 'T1', 'Fnatic', 'G2']
-const roles = ['Top', 'Jungle', 'Mid', 'ADC', 'Support', 'Substitute']
+const roles = ['Top', 'Jungle', 'Mid', 'ADC', 'Support']
 const players = ['Wunder', 'Jankos', 'Caps', 'Perkz', 'Rekkless', 'Mikyx']
 
 export const CreateTournamentModal = ({ isOpen, onClose }) => {
@@ -541,17 +541,17 @@ export const CreateTeam = ({ isOpen, onClose }) => {
 
 export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer, selectedChamp, setSelectedChamp, selectedSkin, setSelectedSkin, offset, setOffset }) => {
     const [username, setUsername] = useState('')
-    const [champion, setChampion] = useState('')
     const [FB, setFB] = useState('')
     const [phone, setPhone] = useState('')
     const [upload, setUpload] = useState('')
+    const [role, setRole] = useState('')
 
     const editedProfile = {
         username,
-        champion,
         fb: FB,
         phone,
         upload,
+        role,
         cover: {
             champion: selectedChamp,
             skin: selectedSkin,
@@ -618,6 +618,14 @@ export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer, selecte
                     <FormControl mt={4}>
                         <FormLabel>Change Cover</FormLabel>
                         <SelectChampion selectedChamp={selectedChamp} setSelectedChamp={setSelectedChamp} selectedSkin={selectedSkin} setSelectedSkin={setSelectedSkin} offset={offset} setOffset={setOffset} />
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Edit Role</FormLabel>
+                        <Select placeholder={player?.role ? player?.role : "Select a role"} onChange={e => setRole(e.target.value)}>
+                            {roles.map((role, i) => {
+                                return <option key={i} value={role}>{role}</option>
+                            })}
+                        </Select>
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Edit Facebook</FormLabel>
