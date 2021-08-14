@@ -1,5 +1,5 @@
 import { Container, Flex, Link } from "@chakra-ui/layout"
-import { Avatar, Heading, MenuItem, Switch, useToast } from "@chakra-ui/react"
+import { Avatar, Box, Heading, MenuItem, Switch, useToast } from "@chakra-ui/react"
 import { useColorMode } from "@chakra-ui/color-mode"
 import { Menu, MenuButton, MenuList, MenuDivider } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
@@ -21,17 +21,17 @@ export const Nav = () => {
 }
 
 const NavLinks = () => {
+    const { colorMode, toggleColorMode } = useColorMode()
     const [user] = useAuthState(auth)
     return (
         <Flex className="nav-links" alignItems="center" justifyContent="space-between" fontWeight="medium">
-            {user ? <LoggedInLinks /> : <LoggedOutLinks />}
+            {user ? <LoggedInLinks colorMode={colorMode} toggleColorMode={toggleColorMode} /> : <LoggedOutLinks colorMode={colorMode} toggleColorMode={toggleColorMode} />}
         </Flex>
     )
 }
 
-const NavAvatar = () => {
+const NavAvatar = ({ colorMode, toggleColorMode }) => {
     const router = useRouter()
-    const { colorMode, toggleColorMode } = useColorMode()
     const [user] = useAuthState(auth)
     const { displayName, uid } = user
     const [downloadUrl] = useDownloadURL(stg.child(`dp/${uid}`));
@@ -53,12 +53,12 @@ const NavAvatar = () => {
     return (
         <Menu closeOnSelect={false}>
             <MenuButton>
-                <Avatar name={displayName} src={downloadUrl} />
+                <Avatar name={displayName && displayName} src={downloadUrl} />
             </MenuButton>
             <MenuList minWidth="240px">
                 <Container display="flex" flexDirection="column">
                     <NextLink href={`/players/player?id=${uid}`}>
-                        <a style={{textDecoration: "none"}}>
+                        <a style={{ textDecoration: "none" }}>
                             <MenuItem fontWeight="bold">{displayName}</MenuItem>
                         </a>
                     </NextLink>
@@ -92,11 +92,13 @@ const LoggedInLinks = () => {
     )
 }
 
-const LoggedOutLinks = () => {
+const LoggedOutLinks = ({ colorMode, toggleColorMode }) => {
     return (
         <>
             <NextLink href="/login"><a>Login</a></NextLink>
             <NextLink href="/register"><a>Register</a></NextLink>
+            <Box>Toggle {colorMode === "dark" ? "Light" : "Dark"} <Switch ml=".5rem" onChange={toggleColorMode} />
+            </Box>
         </>
     )
 }
