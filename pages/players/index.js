@@ -36,7 +36,7 @@ const Players = ({ player }) => {
             background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
         }}>
             <Box flexGrow="2">
-                <NextLink href={`/players/player?id=${name.first}`}>
+                <NextLink href={`/players/player?id=${player.name.first}`}>
                     <a>
                         <Player player={player} role />
                     </a>
