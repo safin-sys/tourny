@@ -10,6 +10,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore"
 import { useDownloadURL } from "react-firebase-hooks/storage"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { useState } from "react";
+import Loading from "../../src/components/Loading"
 
 const matchDates = [
     {
@@ -128,15 +129,12 @@ export default function Player() {
 
     const [value] = useDocumentData(db.collection('players').doc(id))
     return (
-        value ? <PlayerPage value={value} id={id} /> :
-            <Grid height="calc(100vh - 128px)" placeContent="center">
-                <Spinner size="xl" />
-            </Grid>
+        value ? <PlayerPage value={value} id={id} /> : <Loading />
     )
 }
 
 function PlayerPage({ value, id }) {
-    const { username, team, role, captain, phone, fb, email, cover } = value
+    const { username, team, role, captain, phone, fb, email, cover, dp } = value
 
     const [selectedChamp, setSelectedChamp] = useState(cover && cover?.champion)
     const [selectedSkin, setSelectedSkin] = useState(cover && cover?.skin)
@@ -145,9 +143,10 @@ function PlayerPage({ value, id }) {
     const [user] = useAuthState(auth)
     const toast = useToast()
     const handleEditProfile = (e) => {
-        const { username, fb, champion, phone, upload, cover, role } = e
+        const { username, fb, champion, phone, upload, cover, role, dp } = e
         const fucklife = {
             ...(username ? { username } : {}),
+            ...(dp ? { dp } : {}),
             ...(fb ? { fb } : {}),
             ...(champion ? { champion } : {}),
             ...(phone ? { phone } : {}),
@@ -191,7 +190,6 @@ function PlayerPage({ value, id }) {
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [downloadUrl] = useDownloadURL(stg.child(`dp/${id}`));
     return (
         <>
             <Head>
@@ -201,7 +199,7 @@ function PlayerPage({ value, id }) {
                 <Box pos="relative" mb="3rem">
                     <Banner mt="1rem" champion={cover && cover?.champion} skin={cover && cover?.skin} offset={cover && cover?.offset} />
                     <Flex w="60vw" alignItems="center" justifyContent="space-between" pos="absolute" top="75%" left="0" right="0" mx="auto">
-                        <Avatar size="xl" name={username} src={downloadUrl} />
+                        <Avatar size="xl" name={username} src={dp} />
                         {user?.uid === id && <Button alignSelf="flex-end" colorScheme="twitter" variant="outline" onClick={onOpen}>Edit Profile</Button>}
                     </Flex>
                 </Box>
@@ -216,7 +214,7 @@ function PlayerPage({ value, id }) {
                     </Flex>
                 </Container>
                 <Grid templateColumns=".5fr 1fr" mt={8} textAlign="center">
-                    <Text fontWeight="bold" borderBottom="2px solid" borderColor="#dedede" pb=".5rem">Members</Text>
+                    <Text fontWeight="bold" borderBottom="2px solid" borderColor="#dedede" pb=".5rem">Team</Text>
                     <Text fontWeight="bold" borderBottom="2px solid" borderColor="twitter.600" pb=".5rem">Schedule</Text>
                 </Grid>
                 <Grid templateColumns=".5fr 1fr" mt={4} gap="2rem">

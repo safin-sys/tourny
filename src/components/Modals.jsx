@@ -271,17 +271,15 @@ export const ForgotPassword = ({ isOpen, onClose }) => {
 }
 
 export const EditPlayer = ({ isOpen, onClose, player }) => {
-    const { name, picture } = player
-    const fullname = `${name.first} ${name.last}`
-    const src = picture.thumbnail
+    const { username } = player
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>
                     <Flex alignItems="center">
-                        <Avatar name={fullname} src={src} mr=".5rem" />
-                        <Heading ml=".5rem" fontSize="1rem" fontWeight="semibold">{fullname}</Heading>
+                        <Avatar name={username} mr=".5rem" />
+                        <Heading ml=".5rem" fontSize="1rem" fontWeight="semibold">{username}</Heading>
                     </Flex>
                 </ModalHeader>
                 <ModalCloseButton />
@@ -541,14 +539,16 @@ export const CreateTeam = ({ isOpen, onClose }) => {
 
 export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer, selectedChamp, setSelectedChamp, selectedSkin, setSelectedSkin, offset, setOffset }) => {
     const [username, setUsername] = useState('')
-    const [FB, setFB] = useState('')
+    const [dp, setDP] = useState('')
+    const [fb, setFB] = useState('')
     const [phone, setPhone] = useState('')
     const [upload, setUpload] = useState('')
     const [role, setRole] = useState('')
 
     const editedProfile = {
         username,
-        fb: FB,
+        dp,
+        fb,
         phone,
         upload,
         role,
@@ -602,19 +602,14 @@ export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer, selecte
                 <ModalHeader>Edit Profile</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Flex>
-                        <FormControl mr="1rem">
-                            <FormLabel>Edit Name</FormLabel>
-                            <Input placeholder={player?.username} onChange={e => setUsername(e.target.value)} />
-                        </FormControl>
-                        <FormControl w="auto">
-                            <FormLabel>Change DP</FormLabel>
-                            <Button onClick={() => hiddenInput.current.click()} colorScheme={upload ? "green" : undefined} minW="9rem" maxW="10ch" overflow="hidden">
-                                {upload ? upload[0].name : "Click to Upload"}
-                                <Input ref={hiddenInput} accept="image/*" type="file" hidden onChange={handleUpload} />
-                            </Button>
-                        </FormControl>
-                    </Flex>
+                    <FormControl mr="1rem">
+                        <FormLabel>Edit Name</FormLabel>
+                        <Input placeholder={player?.username} onChange={e => setUsername(e.target.value)} />
+                    </FormControl>
+                    <FormControl mt={4}>
+                        <FormLabel>Edit DP URL</FormLabel>
+                        <Input placeholder={player?.dp} onChange={e => setDP(e.target.value)} />
+                    </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Change Cover</FormLabel>
                         <SelectChampion selectedChamp={selectedChamp} setSelectedChamp={setSelectedChamp} selectedSkin={selectedSkin} setSelectedSkin={setSelectedSkin} offset={offset} setOffset={setOffset} />

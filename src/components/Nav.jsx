@@ -5,9 +5,9 @@ import { Menu, MenuButton, MenuList, MenuDivider } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import NextLink from 'next/link'
 import { useAuthState } from "react-firebase-hooks/auth"
-import { auth, stg } from "../helper/base"
-import { useDownloadURL } from "react-firebase-hooks/storage"
+import { auth, db } from "../helper/base"
 import { useRouter } from "next/router"
+import { useDocumentDataOnce } from "react-firebase-hooks/firestore"
 
 export const Nav = () => {
     return (
@@ -34,7 +34,7 @@ const NavAvatar = ({ colorMode, toggleColorMode }) => {
     const router = useRouter()
     const [user] = useAuthState(auth)
     const { displayName, uid } = user
-    const [downloadUrl] = useDownloadURL(stg.child(`dp/${uid}`));
+    const [value] = useDocumentDataOnce(db.collection('players').doc(uid))
     const toast = useToast()
     const signOut = () => {
         auth.signOut()
@@ -53,7 +53,7 @@ const NavAvatar = ({ colorMode, toggleColorMode }) => {
     return (
         <Menu closeOnSelect={false}>
             <MenuButton>
-                <Avatar name={displayName && displayName} src={downloadUrl} />
+                <Avatar name={displayName && displayName} src={value?.dp} />
             </MenuButton>
             <MenuList minWidth="240px">
                 <Container display="flex" flexDirection="column">
