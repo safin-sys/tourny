@@ -80,14 +80,14 @@ const NavAvatar = ({ colorMode, toggleColorMode }) => {
     )
 }
 
-const LoggedInLinks = () => {
+const LoggedInLinks = ({ colorMode, toggleColorMode }) => {
     return (
         <>
             <NextLink href="/"><a>Home</a></NextLink>
             <NextLink href="/tournaments"><a>Tournaments</a></NextLink>
             <NextLink href="/teams"><a>Teams</a></NextLink>
             <NextLink href="/players"><a>Players</a></NextLink>
-            <NavAvatar />
+            <NavAvatar colorMode={colorMode} toggleColorMode={toggleColorMode} />
         </>
     )
 }

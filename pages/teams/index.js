@@ -19,7 +19,6 @@ const teams = [
 
 export default function Teams() {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const { colorMode } = useColorMode()
     return (
         <>
             <Head>
@@ -33,22 +32,29 @@ export default function Teams() {
                 <Container maxW="75vw" marginY="2rem" padding="0" display="grid" gridTemplateColumns="1fr 1fr" gridGap="0 1rem">
                     {teams?.map((team, i) => {
                         return (
-                            <NextLink key={i} href={'/teams/team?id=' + team.name}>
-                                <a>
-                                    <Flex p="1rem" alignItems="center" _hover={{
-                                        background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
-                                    }}>
-                                        <Avatar name={team.name} mr="1.5rem" src={team.logo} bgColor="gray.800" />
-                                        <Heading fontSize="1rem" textDecoration="none">{team.name}</Heading>
-                                    </Flex>
-                                </a>
-                            </NextLink>
-
+                            <Team key={i} team={team} />
                         )
                     })}
                 </Container>
             </Container >
             <CreateTeam isOpen={isOpen} onClose={onClose} />
         </>
+    )
+}
+
+const Team = ({ team }) => {
+    const {name, logo} = team
+    const { colorMode } = useColorMode()
+    return (
+        <NextLink href={'/teams/team?id=' + name}>
+            <a>
+                <Flex p="1rem" alignItems="center" _hover={{
+                    background: `${colorMode === "light" ? "gray.200" : "gray.900"}`
+                }}>
+                    <Avatar name={name} mr="1.5rem" src={logo} bgColor="gray.800" />
+                    <Heading fontSize="1rem" textDecoration="none">{name}</Heading>
+                </Flex>
+            </a>
+        </NextLink>
     )
 }
