@@ -16,11 +16,12 @@ import {
     Box,
     useToast,
     useDisclosure,
+    Text,
 } from "@chakra-ui/react"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import { Input } from "@chakra-ui/input"
 import { Grid } from "@chakra-ui/layout"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import dayjs from "dayjs"
 import { auth, db } from "../helper/base"
 import { useRouter } from "next/router"
@@ -385,7 +386,6 @@ export const EditTeam = ({ isOpen, onClose, team }) => {
 }
 
 const CreatMembers = ({ members, setMembers, index }) => {
-    const { name, role, captain } = members[index]
     const handleChange = (e, key) => {
         const newMember = [...members]
         newMember[index][key] = e.target.value
@@ -398,18 +398,11 @@ const CreatMembers = ({ members, setMembers, index }) => {
     }
     return (
         <Flex alignItems="center" mt={4}>
-            <Flex justifyContent="space-between" w="100%">
-                <Select placeholder="Select Player" mr="1rem" onChange={e => handleChange(e, 'name')}>
-                    {players.map((player, i) => {
-                        return <option key={i} value={player}>{player}</option>
-                    })}
-                </Select>
-                <Select placeholder="Select Role" onChange={e => handleChange(e, 'role')}>
-                    {roles.map((role, i) => {
-                        return <option key={i} value={role}>{role}</option>
-                    })}
-                </Select>
-            </Flex>
+            <Select placeholder="Select Player" mr="1rem" onChange={e => handleChange(e)}>
+                {players.map((player, i) => {
+                    return <option key={i} value={player}>{player}</option>
+                })}
+            </Select>
             <Button ml="1rem" colorScheme="red" onClick={handleDelete}>Delete</Button>
         </Flex>
     )
@@ -458,72 +451,6 @@ export const MVP = ({ isOpen, onClose }) => {
                                 })}
                             </Select>
                         </Flex>
-                    </FormControl>
-                </ModalBody>
-                <ModalFooter>
-                    <Button onClick={onClose} mr={3}>Cancel</Button>
-                    <Button colorScheme="twitter">
-                        Save
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    )
-}
-
-export const CreateTeam = ({ isOpen, onClose }) => {
-    const member = {
-        name: undefined,
-        role: undefined,
-        captain: false
-    }
-    const [members, setMembers] = useState([member])
-    return (
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Edit Team</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <Flex>
-                        <FormControl mr="1rem">
-                            <FormLabel>Edit Name</FormLabel>
-                            <Input />
-                        </FormControl>
-                        <FormControl w="auto">
-                            <FormLabel>Change Logo</FormLabel>
-                            <Button>
-                                Click to Upload
-                                <Input type="file" hidden />
-                            </Button>
-                        </FormControl>
-                    </Flex>
-                    <FormControl mt={4}>
-                        <FormLabel>Change Cover</FormLabel>
-                        <Select>
-                            {champions.map((champ, i) => {
-                                return <option key={i} value={champ}>{champ}</option>
-                            })}
-                        </Select>
-                    </FormControl>
-                    <FormControl mt={4}>
-                        <FormLabel>Add Members</FormLabel>
-                        {members.map((match, i) => {
-                            return <CreatMembers key={i} index={i} members={members} setMembers={setMembers} />
-                        })}
-                    </FormControl>
-                    <Button mt={4} onClick={() => setMembers(members => [...members, member])}>Add More Players</Button>
-                    <FormControl mt={4}>
-                        <FormLabel>Select Captain</FormLabel>
-                        <Select placeholder="Select Captain">
-                            {members.map((member, i) => {
-                                if (member.name) {
-                                    return <option key={i} value={member.name}>{member.name}</option>
-                                } else if (members.length === 0) {
-                                    return <option key={i} value={null}>No Player</option>
-                                }
-                            })}
-                        </Select>
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>
@@ -612,7 +539,14 @@ export const EditProfile = ({ isOpen, onClose, player, handleEditPlayer, selecte
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Change Cover</FormLabel>
-                        <SelectChampion selectedChamp={selectedChamp} setSelectedChamp={setSelectedChamp} selectedSkin={selectedSkin} setSelectedSkin={setSelectedSkin} offset={offset} setOffset={setOffset} />
+                        <SelectChampion
+                            selectedChamp={selectedChamp}
+                            setSelectedChamp={setSelectedChamp}
+                            selectedSkin={selectedSkin}
+                            setSelectedSkin={setSelectedSkin}
+                            offset={offset}
+                            setOffset={setOffset}
+                        />
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Edit Role</FormLabel>
