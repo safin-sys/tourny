@@ -1,28 +1,18 @@
 import Head from "next/head"
 import { Flex, Container, Heading } from "@chakra-ui/layout"
 import NextLink from "next/link"
-import { Avatar, Button, FormControl, FormLabel, Grid, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Tooltip, useColorMode, useDisclosure } from "@chakra-ui/react"
+import { Avatar, Button, FormControl, FormLabel, Grid, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Tooltip, useColorMode, useDisclosure, useToast } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { db } from "../../src/helper/base"
 import { Field, FieldArray, Form, Formik, useFormik } from "formik"
-
-const teams = [
-    { name: 'Astralis', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FAST-FullonDark.png', win: '5', lose: '6' },
-    { name: 'Rogue', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FRogue_FullColor2.png', win: '8', lose: '3' },
-    { name: 'Fnatic', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2F1592591295307_FnaticFNC-01-FullonDark.png', win: '8', lose: '3' },
-    { name: 'Misfits Gaming', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2F1592591419157_MisfitsMSF-01-FullonDark.png', win: '8', lose: '4' },
-    { name: 'MAD Lions', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2F1592591395339_MadLionsMAD-01-FullonDark.png', win: '7', lose: '4' },
-    { name: 'G2 Esports', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FG2-FullonDark.png', win: '6', lose: '5' },
-    { name: 'Team Vitality', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FVitality-logo-color-outline-rgb.png', win: '5', lose: '6' },
-    { name: 'EXCEL', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FExcel_FullColor2.png', win: '4', lose: '8' },
-    { name: 'Schalke 04', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FS04_Standard_Logo1.png', win: '3', lose: '8' },
-    { name: 'SK Gaming', logo: 'https://am-a.akamaihd.net/image?resize=70:&f=http%3A%2F%2Fstatic.lolesports.com%2Fteams%2FSK_FullColor.png', win: '2', lose: '9' }
-].sort((a, b) => ('' + a.name).localeCompare(b.name));
+import { useCollectionData } from "react-firebase-hooks/firestore"
 
 export default function Teams() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [users, setUsers] = useState([])
 
+    const [teams] = useCollectionData(db.collection('teams'))
+    console.log(teams);
     const getUsers = () => {
         db.collection('players').get().then(data => {
             data.forEach(doc => {
@@ -85,13 +75,61 @@ const Team = ({ team }) => {
 
 export const CreateTeam = ({ isOpen, onClose, users }) => {
     const [cover, setCover] = useState()
-    
+
     const initialValues = {
         name: '',
         logo: '',
-        cover,
         players: [''],
         captain: ''
+    }
+    const toast = useToast()
+    const handleSubmit = formik => {
+        const {name, logo, players, captain} = formik
+        const {champion, skin, offset} = cover
+        const cleanInput = {
+            ...(name ? { name } : {}),
+            ...(logo ? { logo } : {}),
+            ...(players ? { players } : {}),
+            ...(captain ? { captain } : {}),
+            cover: {
+                ...(champion ? { champion } : {}),
+                ...(skin ? { skin } : {}),
+                ...(offset ? { offset } : {})
+            }
+        }
+        db.collection("teams").doc(formik.name).set(cleanInput)
+            .then(() => {
+                toast({
+                    title: "Team created captain.",
+                    description: `Your team ${name} was successfully created.`,
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+                players.forEach((id) => {
+                    db.collection("players").doc(id).update({
+                        team: name,
+                        captain: captain === id ? true : false
+                    })
+                })
+                onClose()
+            })
+            .catch(err => {
+                console.log(err);
+                toast({
+                    title: "Team creation failed.",
+                    description: err.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "bottom-left"
+                })
+            })
+    }
+
+    const handleClose = () => {
+        onClose()
     }
 
     return (
@@ -130,7 +168,7 @@ export const CreateTeam = ({ isOpen, onClose, users }) => {
                                                             <Flex mt={4} key={i}>
                                                                 <Field name={`players.${i}`} key={i} type="select" as={Select} placeholder="Select Player">
                                                                     {users?.map((user, i) => {
-                                                                        return <option key={i} value={user.id}>
+                                                                        return !user.team && <option key={i} value={user.id}>
                                                                             {user.username}
                                                                             {" -> "}
                                                                             {user.role ? user.role : "No Role"}
@@ -157,8 +195,8 @@ export const CreateTeam = ({ isOpen, onClose, users }) => {
                                 </FormControl>
                             </ModalBody>
                             <ModalFooter>
-                                <Button onClick={onClose} mr={3}>Cancel</Button>
-                                <Button colorScheme="twitter" onClick={() => console.log(props.values)}>
+                                <Button onClick={() => handleClose(props.resetForm())} mr={3}>Cancel</Button>
+                                <Button colorScheme="twitter" onClick={() => handleSubmit(props.values)}>
                                     Save
                                 </Button>
                             </ModalFooter>

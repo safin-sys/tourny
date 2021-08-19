@@ -143,7 +143,7 @@ function PlayerPage({ value, id }) {
     const [user] = useAuthState(auth)
     const toast = useToast()
     const handleEditProfile = (e) => {
-        const { username, fb, champion, phone, upload, cover, role, dp } = e
+        const { username, fb, champion, phone, cover, role, dp } = e
         const fucklife = {
             ...(username ? { username } : {}),
             ...(dp ? { dp } : {}),
@@ -153,18 +153,6 @@ function PlayerPage({ value, id }) {
             ...(cover ? { cover } : {}),
             ...(role ? { role } : {})
         }
-        const stgRefUpdate = stg.child(`dp/${user.uid}`)
-        upload && stgRefUpdate.put(upload[0])
-            .then(() => {
-                toast({
-                    title: "DP Changed.",
-                    description: "We've updated your DP for you.",
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                    position: "bottom-left"
-                })
-            })
         db.collection("players").doc(user.uid).update(fucklife)
             .then(() => {
                 toast({
