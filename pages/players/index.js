@@ -49,7 +49,7 @@ export default function PlayersPage() {
                         <Players key={i} player={user} />
                     )
                 })}
-            </Container> : <Loading />}
+            </Container> : <Loading h />}
         </>
     )
 }

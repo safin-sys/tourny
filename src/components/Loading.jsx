@@ -1,8 +1,8 @@
 import { Grid, Spinner } from "@chakra-ui/react";
 
-export default function Loading() {
+export default function Loading({ h }) {
     return (
-        <Grid height="calc(100vh - 128px)" placeContent="center">
+        <Grid height={h ? "calc(100vh - 128px)" : "auto"} placeContent="center">
             <Spinner size="xl" />
         </Grid>
     )

@@ -129,7 +129,7 @@ export default function Player() {
 
     const [value] = useDocumentData(db.collection('players').doc(id))
     return (
-        value ? <PlayerPage value={value} id={id} /> : <Loading />
+        value ? <PlayerPage value={value} id={id} /> : <Loading h />
     )
 }
 

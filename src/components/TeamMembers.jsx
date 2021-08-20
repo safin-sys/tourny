@@ -1,33 +1,25 @@
 import { Avatar, Box, Flex, Heading, Text, useColorMode } from "@chakra-ui/react";
 
-const team = [
-    { name: 'Canna', captain: false, role: 'Top' },
-    { name: 'Cuzz', captain: false, role: 'Jungle' },
-    { name: 'Faker', captain: true, role: 'Mid' },
-    { name: 'Teddy', captain: false, role: 'ADC' },
-    { name: 'Keria', captain: false, role: 'Support' }
-]
-
-export default function TeamMembers() {
+export default function TeamMembers({ team }) {
     return (
         <Flex flexDirection="column">
             <Flex mt={4} flexDir="column">
-                {team.map((member, i) => {
+                {team[0] ? team?.map((member, i) => {
                     return <MemberDetails key={i} member={member} />
-                })}
+                }) : <Text mx="auto">No Players</Text>}
             </Flex>
         </Flex>
     )
 }
 
 const MemberDetails = ({ member }) => {
-    const { name, captain, role } = member
+    const { username, captain, role, dp } = member
     const { colorMode } = useColorMode()
     return (
         <Flex justifyContent="space-between" alignItems="center" w="100%" mb="1rem">
             <Flex alignItems="center">
-                <Avatar name={name} mr="1rem" />
-                <Heading fontSize="1rem" mr=".5rem">{name}</Heading>
+                <Avatar src={dp} name={username} mr="1rem" />
+                <Heading fontSize="1rem" mr=".5rem">{username}</Heading>
                 {captain && <Box mt=".5rem"><Captain /></Box>}
             </Flex>
             <Text color={`${colorMode === "light" ? "#536471" : "#bebebe"}`}>{role}</Text>

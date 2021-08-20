@@ -6,13 +6,14 @@ import { useEffect, useState } from "react"
 import { db } from "../../src/helper/base"
 import { Field, FieldArray, Form, Formik, useFormik } from "formik"
 import { useCollectionData } from "react-firebase-hooks/firestore"
+import Loading from "../../src/components/Loading"
+import SelectChampion from "../../src/components/SelectChampion"
 
 export default function Teams() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [users, setUsers] = useState([])
 
     const [teams] = useCollectionData(db.collection('teams'))
-    console.log(teams);
     const getUsers = () => {
         db.collection('players').get().then(data => {
             data.forEach(doc => {
@@ -43,13 +44,13 @@ export default function Teams() {
                     <Heading fontSize="1.5rem">Teams</Heading>
                     <Button colorScheme="twitter" onClick={onOpen}>Create a Team</Button>
                 </Flex>
-                <Container maxW="75vw" marginY="2rem" padding="0" display="grid" gridTemplateColumns="1fr 1fr" gridGap="0 1rem">
+                {teams ? <Container maxW="75vw" marginY="2rem" padding="0" display="grid" gridTemplateColumns="1fr 1fr" gridGap="0 1rem">
                     {teams?.map((team, i) => {
                         return (
                             <Team key={i} team={team} />
                         )
                     })}
-                </Container>
+                </Container> : <Loading h />}
             </Container >
             <CreateTeam users={users} isOpen={isOpen} onClose={onClose} />
         </>
@@ -97,7 +98,7 @@ export const CreateTeam = ({ isOpen, onClose, users }) => {
                 ...(offset ? { offset } : {})
             }
         }
-        db.collection("teams").doc(formik.name).set(cleanInput)
+        db.collection("teams").doc(name).set(cleanInput)
             .then(() => {
                 toast({
                     title: "Team created captain.",
@@ -107,7 +108,7 @@ export const CreateTeam = ({ isOpen, onClose, users }) => {
                     isClosable: true,
                     position: "bottom-left"
                 })
-                players.forEach((id) => {
+                players.length > 1 && players.forEach((id) => {
                     db.collection("players").doc(id).update({
                         team: name,
                         captain: captain === id ? true : false
@@ -155,7 +156,7 @@ export const CreateTeam = ({ isOpen, onClose, users }) => {
                                 </FormControl>
                                 <FormControl mt={4}>
                                     <FormLabel>Change Cover</FormLabel>
-                                    <SelectChamp setCover={setCover} />
+                                    <SelectChampion setCover={setCover} />
                                 </FormControl>
                                 <FormControl mt={4}>
                                     <FormLabel>Add Members</FormLabel>
@@ -205,53 +206,5 @@ export const CreateTeam = ({ isOpen, onClose, users }) => {
                 </Form>
             )}
         </Formik>
-    )
-}
-
-const SelectChamp = ({ setCover }) => {
-    const [champions, setChampions] = useState()
-    const [skins, setSkins] = useState()
-    const formik = useFormik({
-        initialValues: {
-            champion: '',
-            skin: 0,
-            offset: 0,
-        },
-        enableReinitialize: true
-    })
-    useEffect(() => {
-        setCover(formik.values)
-    }, [formik.values])
-    const { champion, skin, offset } = formik.values
-
-    const skinURL = `http://ddragon.leagueoflegends.com/cdn/11.16.1/data/en_US/champion/${champion}.json`
-
-
-    if (!champions) fetch("/championList.json")
-        .then(res => res.json())
-        .then(data => setChampions(data))
-
-    useEffect(() => {
-        if (champion) fetch(skinURL)
-            .then(res => res.json())
-            .then(data => setSkins(data.data[champion].skins))
-    }, [champion])
-
-    return (
-        <Grid templateColumns="1fr 1fr 1fr" columnGap="1rem">
-            <Select placeholder="Select Champion" name="champion" value={champion} onChange={formik.handleChange}>
-                {champions?.map((champ, i) => {
-                    return <option key={i} value={champ}>{champ}</option>
-                })}
-            </Select>
-            <Select placeholder="Select Skin" name="skin" value={skin} onChange={formik.handleChange}>
-                {skins?.map((champ, i) => {
-                    return <option key={i} value={champ.num}>{champ.name === "default" ? "Default" : champ.name}</option>
-                })}
-            </Select>
-            <Tooltip hasArrow label="Offset changes position of the cover picture. Higher the number lower the picture.">
-                <Input as="input" type="number" max="100" min="0" name="offset" value={offset} onChange={formik.handleChange} />
-            </Tooltip>
-        </Grid>
     )
 }

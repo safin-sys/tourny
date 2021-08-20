@@ -1,49 +1,50 @@
-import { Grid, Select, Tooltip } from "@chakra-ui/react"
+import { Grid, Input, Select, Tooltip } from "@chakra-ui/react"
+import { useFormik } from "formik"
 import { useEffect, useState } from "react"
-import { NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from "@chakra-ui/react"
 
-export default function SelectChampion({ selectedChamp, setSelectedChamp, selectedSkin, setSelectedSkin, offset, setOffset }) {
-    const [champData, setChampData] = useState()
-    const [champSkinData, setChampSkinData] = useState()
+export default function SelectChampion ({ setCover }) {
+    const [champions, setChampions] = useState()
+    const [skins, setSkins] = useState()
+    const formik = useFormik({
+        initialValues: {
+            champion: '',
+            skin: 0,
+            offset: 0,
+        },
+        enableReinitialize: true
+    })
+    useEffect(() => {
+        setCover(formik.values)
+    }, [formik.values])
+    const { champion, skin, offset } = formik.values
 
-    const champURL = "http://ddragon.leagueoflegends.com/cdn/11.16.1/data/en_US/champion.json"
-    const skinURL = `http://ddragon.leagueoflegends.com/cdn/11.16.1/data/en_US/champion/${selectedChamp}.json`
+    const skinURL = `http://ddragon.leagueoflegends.com/cdn/11.16.1/data/en_US/champion/${champion}.json`
 
-    if (!champData) fetch(champURL).then(res => res.json()).then(data => setChampData(data.data))
+
+    if (!champions) fetch("/championList.json")
+        .then(res => res.json())
+        .then(data => setChampions(data))
 
     useEffect(() => {
-        if (selectedChamp) fetch(skinURL).then(res => res.json()).then(data => {
-            setChampSkinData(data.data[selectedChamp].skins)
-        })
-    }, [selectedChamp])
+        if (champion) fetch(skinURL)
+            .then(res => res.json())
+            .then(data => setSkins(data.data[champion].skins))
+    }, [champion])
 
-    const champions = []
-
-    if (champData) {
-        for (const [key] of Object.entries(champData)) {
-            champions.push(key);
-        }
-    }
     return (
         <Grid templateColumns="1fr 1fr 1fr" columnGap="1rem">
-            <Select placeholder="Select Champion" value={selectedChamp} onChange={e => setSelectedChamp(e.target.value)}>
-                {champions.map((champ, i) => {
+            <Select placeholder="Select Champion" name="champion" value={champion} onChange={formik.handleChange}>
+                {champions?.map((champ, i) => {
                     return <option key={i} value={champ}>{champ}</option>
                 })}
             </Select>
-            <Select placeholder="Select Skin" value={selectedSkin} onChange={e => setSelectedSkin(e.target.value)}>
-                {champSkinData?.map((champ, i) => {
-                    return <option key={i} value={champ.num}>{champ.name}</option>
+            <Select placeholder="Select Skin" name="skin" value={skin} onChange={formik.handleChange}>
+                {skins?.map((champ, i) => {
+                    return <option key={i} value={champ.num}>{champ.name === "default" ? "Default" : champ.name}</option>
                 })}
             </Select>
             <Tooltip hasArrow label="Offset changes position of the cover picture. Higher the number lower the picture.">
-                <NumberInput allowMouseWheel defaultValue={offset} min={0} max={100} onChange={e => setOffset(e)}>
-                    <NumberInputField />
-                    <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                    </NumberInputStepper>
-                </NumberInput>
+                <Input as="input" type="number" max="100" min="0" name="offset" value={offset} onChange={formik.handleChange} />
             </Tooltip>
         </Grid>
     )
