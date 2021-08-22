@@ -4,7 +4,7 @@ import { Banner } from "../../src/components/Banner";
 import Head from "next/head"
 import TeamMembers from "../../src/components/TeamMembers";
 import { Schedule } from "../../src/components/Schedule"
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { db } from "../../src/helper/base";
 import { useEffect, useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
@@ -123,17 +123,40 @@ const matchDates = [
 
 export default function Team() {
     const [playersList, setPlayersList] = useState([])
+    const [users, setUsers] = useState([])
     const router = useRouter()
     const { id } = router.query
-    const [value] = useDocumentDataOnce(db.collection("teams").doc(id))
-    const { name, logo, players, cover } = value || {}
+    const [value] = useDocumentData(db.collection("teams").doc(id))
+    const { name, logo, players, cover, titles } = value || {}
+
+    const getUsers = () => {
+        db.collection('players').get().then(data => {
+            data.forEach(doc => {
+                const user = {
+                    id: doc.id,
+                    ...doc.data()
+                }
+                setUsers(usrs => [...usrs, user])
+            })
+        })
+    }
+
+    useEffect(() => {
+        if (users.length > 0) {
+            setUsers([])
+            getUsers()
+        } else {
+            getUsers()
+        }
+    }, [])
+
     useEffect(() => {
         if (!playersList[0] && players) {
             players.forEach((player) => {
-                player && db.collection("players").doc(player)
-                .get()
-                .then((doc) => {
-                    setPlayersList(playa => [...playa, doc.data()])
+                users.forEach((user) => {
+                    if (user.id === player) {
+                        setPlayersList(playa => [...playa, user])
+                    }
                 })
             })
         }
@@ -153,23 +176,26 @@ export default function Team() {
                         <Button alignSelf="flex-end" colorScheme="twitter" variant="outline" onClick={onOpen}>Edit Team</Button>
                     </Flex>
                 </Box>
-                <EditTeam isOpen={isOpen} onClose={onClose} team={name} />
+                <EditTeam isOpen={isOpen} onClose={onClose} team={value} users={users} playersList={playersList} />
                 <Container maxW="60vw" padding="0">
                     <Flex alignItems="center">
                         <Heading fontSize="1.5rem">{name}</Heading>
-                        <Box mx=".25rem">.</Box>
+                        {titles && <Box mx=".25rem">.</Box>}
                         <Flex mt=".5rem">
-                            <Star />
-                            <Star />
-                            <Star />
+                            {titles?.map((title, i) => {
+                                return <Star key={i} />
+                            })}
                         </Flex>
                     </Flex>
-                    <Flex mt={2}>
-                        <Text mr={2}>LCK Spring 2020</Text>
-                        <Text mr={2}>-</Text>
-                        <Text mr={2}>LCK Summer 2021</Text>
-                        <Text mr={2}>-</Text>
-                        <Text mr={2}>LCK Fall 2021</Text>
+                    <Flex mt={2} alignItems="center" flexWrap="wrap">
+                        {titles?.map((title, i) => {
+                            return (
+                                <Flex alignItems="center" key={i}>
+                                    <Text>{title}</Text>
+                                    {i + 1 != titles.length && <Text mx=".5rem"> - </Text>}
+                                </Flex>
+                            )
+                        })}
                     </Flex>
                 </Container>
                 <Grid templateColumns=".5fr 1fr" mt={8} textAlign="center">
@@ -195,14 +221,13 @@ const Star = () => {
     )
 }
 
-export const EditTeam = ({ isOpen, onClose, team, users }) => {
+export const EditTeam = ({ isOpen, onClose, team, users, playersList }) => {
     const [cover, setCover] = useState()
-
     const initialValues = {
-        name: '',
-        logo: '',
-        players: [''],
-        captain: ''
+        name: team?.name,
+        logo:  team?.logo,
+        players: team?.players || [''],
+        captain: team?.captain || ''
     }
     const toast = useToast()
     const handleSubmit = formik => {
@@ -213,23 +238,23 @@ export const EditTeam = ({ isOpen, onClose, team, users }) => {
             ...(logo ? { logo } : {}),
             ...(players ? { players } : {}),
             ...(captain ? { captain } : {}),
-            cover: {
+            ...(champion || skin || offset ?  {cover: {
                 ...(champion ? { champion } : {}),
                 ...(skin ? { skin } : {}),
                 ...(offset ? { offset } : {})
-            }
+            }} : {})
         }
-        db.collection("teams").doc(name).set(cleanInput)
+        db.collection("teams").doc(name).update(cleanInput)
             .then(() => {
                 toast({
-                    title: "Team created captain.",
-                    description: `Your team ${name} was successfully created.`,
+                    title: "Team updated captain.",
+                    description: `Your team ${name} was successfully updated.`,
                     status: "success",
                     duration: 5000,
                     isClosable: true,
                     position: "bottom-left"
                 })
-                players.length > 1 && players.forEach((id) => {
+                players.length >= 1 && players.forEach((id) => {
                     db.collection("players").doc(id).update({
                         team: name,
                         captain: captain === id ? true : false
@@ -264,7 +289,7 @@ export const EditTeam = ({ isOpen, onClose, team, users }) => {
                     <Modal isOpen={isOpen} onClose={onClose} size="xl">
                         <ModalOverlay />
                         <ModalContent>
-                            <ModalHeader>Create Team</ModalHeader>
+                            <ModalHeader>Edit Team</ModalHeader>
                             <ModalCloseButton />
                             <ModalBody>
                                 <FormControl>
@@ -288,8 +313,8 @@ export const EditTeam = ({ isOpen, onClose, team, users }) => {
                                                     {props.values.players.map((player, i) => {
                                                         return (
                                                             <Flex mt={4} key={i}>
-                                                                <Field name={`players.${i}`} key={i} type="select" as={Select} placeholder="Select Player">
-                                                                    {users && users[0] && users?.map((user, i) => {
+                                                                <Field name={`players.${i}`} key={i} type="select" as={Select} placeholder={playersList && playersList[i] ? playersList[i].username : "Select Player"}>
+                                                                    {users && users?.map((user, i) => {
                                                                         return !user.team && <option key={i} value={user.id}>
                                                                             {user.username}
                                                                             {" -> "}

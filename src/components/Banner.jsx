@@ -10,7 +10,7 @@ export const Banner = ({champion, tournamentName, date, skin, offset}) => {
                 <Heading fontSize="2rem">{tournamentName}</Heading>
                 <Text fontWeight="bold" fontStyle="italic">{date}</Text>
             </Container>
-            <Image objectPosition={`0% ${offset ? offset : 20}%`} objectFit="cover" w="100%" h="200px" borderRadius="15px" src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${handleChampionUndefined}_${skin ? skin : 0}.jpg`} alt={champion} />
+            <Image objectPosition={`0% ${offset || 0}%`} objectFit="cover" w="100%" h="200px" borderRadius="15px" src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${handleChampionUndefined}_${skin ? skin : 0}.jpg`} alt={champion} />
         </Container>
     )
 }
