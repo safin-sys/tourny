@@ -16,6 +16,7 @@ if (!firebase.apps.length) {
     firebase.initializeApp(config);
 }
 
+export const fb = firebase
 export const app = firebase.app()
 export const auth = app.auth()
 export const db = app.firestore()

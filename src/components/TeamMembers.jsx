@@ -1,11 +1,28 @@
 import { Avatar, Box, Flex, Heading, Text, useColorMode } from "@chakra-ui/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function TeamMembers({ team }) {
+export default function TeamMembers({ name, users }) {
+    const [team, setTeam] = useState([])
+    useEffect(() => {
+        setTeam([])
+        users?.forEach((user) => {
+            if (user.team === name) {
+                setTeam(t => [...t, user])
+            }
+        })
+    }, [name, users])
     return (
         <Flex flexDirection="column">
             <Flex mt={4} flexDir="column">
                 {team[0] ? team?.map((member, i) => {
-                    return <MemberDetails key={i} member={member} />
+                    return (
+                        <Link key={i} href={`/players/player?id=${member.id}`}>
+                            <a>
+                                <MemberDetails member={member} />
+                            </a>
+                        </Link>
+                    )
                 }) : <Text mx="auto">No Players</Text>}
             </Flex>
         </Flex>
@@ -13,14 +30,14 @@ export default function TeamMembers({ team }) {
 }
 
 const MemberDetails = ({ member }) => {
-    const { username, captain, role, dp } = member
+    const { username, admin, captain, role, dp } = member
     const { colorMode } = useColorMode()
     return (
         <Flex justifyContent="space-between" alignItems="center" w="100%" mb="1rem">
             <Flex alignItems="center">
                 <Avatar src={dp} name={username} mr="1rem" />
                 <Heading fontSize="1rem" mr=".5rem">{username}</Heading>
-                {captain && <Box mt=".5rem"><Captain /></Box>}
+                {(admin || captain) && <Box mt=".5rem"><Captain /></Box>}
             </Flex>
             <Text color={`${colorMode === "light" ? "#536471" : "#bebebe"}`}>{role}</Text>
         </Flex>

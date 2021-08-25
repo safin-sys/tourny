@@ -9,7 +9,7 @@ import { auth, db, stg } from "../../src/helper/base";
 import { useDocumentData } from "react-firebase-hooks/firestore"
 import { useDownloadURL } from "react-firebase-hooks/storage"
 import { useAuthState } from "react-firebase-hooks/auth"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../../src/components/Loading"
 
 const matchDates = [
@@ -134,6 +134,7 @@ export default function Player() {
 }
 
 function PlayerPage({ value, id }) {
+    const [users, setUsers] = useState([])
     const { username, team, role, captain, phone, fb, email, cover, dp } = value
 
     const [selectedChamp, setSelectedChamp] = useState(cover && cover?.champion)
@@ -177,6 +178,27 @@ function PlayerPage({ value, id }) {
             })
     }
 
+    const getUsers = () => {
+        db.collection('players').get().then(data => {
+            data.forEach(doc => {
+                const user = {
+                    id: doc.id,
+                    ...doc.data()
+                }
+                setUsers(usrs => [...usrs, user])
+            })
+        })
+    }
+
+    useEffect(() => {
+        if (users.length > 0) {
+            setUsers([])
+            getUsers()
+        } else {
+            getUsers()
+        }
+    }, [])
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
@@ -208,7 +230,7 @@ function PlayerPage({ value, id }) {
                 <Grid templateColumns=".5fr 1fr" mt={4} gap="2rem">
                     <Box>
                         <Heading fontSize="1.5rem" my=".4rem">{team}</Heading>
-                        <TeamMembers />
+                        <TeamMembers name={team} users={users} />
                     </Box>
                     <Box>
                         {matchDates.map((matchDate, i) => {

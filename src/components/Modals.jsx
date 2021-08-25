@@ -271,51 +271,6 @@ export const ForgotPassword = ({ isOpen, onClose }) => {
     )
 }
 
-export const EditPlayer = ({ isOpen, onClose, player }) => {
-    const { username } = player
-    return (
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>
-                    <Flex alignItems="center">
-                        <Avatar name={username} mr=".5rem" />
-                        <Heading ml=".5rem" fontSize="1rem" fontWeight="semibold">{username}</Heading>
-                    </Flex>
-                </ModalHeader>
-                <ModalCloseButton />
-                <ModalBody display="flex">
-                    <FormControl mr="1rem">
-                        <FormLabel>Select Status</FormLabel>
-                        <Select value="Player">
-                            <option>Admin</option>
-                            <option>Captain</option>
-                            <option>Player</option>
-                        </Select>
-                    </FormControl>
-                    <FormControl ml="1rem">
-                        <FormLabel>Select Team</FormLabel>
-                        <Select mr="1rem">
-                            {teams.map((team, i) => {
-                                return <option key={i} value={team}>{team}</option>
-                            })}
-                        </Select>
-                    </FormControl>
-                </ModalBody>
-                <ModalFooter display="flex" justifyContent="space-between">
-                    <Button colorScheme="red" mr={3}>Delete Player</Button>
-                    <Box>
-                        <Button onClick={onClose} mr={3}>Cancel</Button>
-                        <Button colorScheme="twitter">
-                            Save
-                        </Button>
-                    </Box>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    )
-}
-
 export const EditTeam = ({ isOpen, onClose, team }) => {
     const member = {
         name: undefined,

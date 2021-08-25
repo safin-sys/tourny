@@ -127,7 +127,7 @@ export default function Team() {
     const router = useRouter()
     const { id } = router.query
     const [value] = useDocumentData(db.collection("teams").doc(id))
-    const { name, logo, players, cover, titles } = value || {}
+    const { name, logo, cover, titles } = value || {}
 
     const getUsers = () => {
         db.collection('players').get().then(data => {
@@ -151,16 +151,14 @@ export default function Team() {
     }, [])
 
     useEffect(() => {
-        if (!playersList[0] && players) {
-            players.forEach((player) => {
-                users.forEach((user) => {
-                    if (user.id === player) {
-                        setPlayersList(playa => [...playa, user])
-                    }
-                })
+        if (!playersList[0] && name) {
+            users.forEach((user) => {
+                if (user.team === name) {
+                    setPlayersList(playa => [...playa, user])
+                }
             })
         }
-    }, [players])
+    }, [name])
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
@@ -203,7 +201,7 @@ export default function Team() {
                     <Text fontWeight="bold" borderBottom="2px solid" borderColor="twitter.600" pb=".5rem">Schedule</Text>
                 </Grid>
                 <Grid templateColumns=".5fr 1fr" mt={4} gap="2rem">
-                    <TeamMembers team={playersList} />
+                    <TeamMembers name={name} users={users} />
                     <Box>
                         {matchDates.map((matchDate, i) => {
                             return <Schedule key={i} matchDate={matchDate} />
@@ -225,7 +223,7 @@ export const EditTeam = ({ isOpen, onClose, team, users, playersList }) => {
     const [cover, setCover] = useState()
     const initialValues = {
         name: team?.name,
-        logo:  team?.logo,
+        logo: team?.logo,
         players: team?.players || [''],
         captain: team?.captain || ''
     }
@@ -238,11 +236,13 @@ export const EditTeam = ({ isOpen, onClose, team, users, playersList }) => {
             ...(logo ? { logo } : {}),
             ...(players ? { players } : {}),
             ...(captain ? { captain } : {}),
-            ...(champion || skin || offset ?  {cover: {
-                ...(champion ? { champion } : {}),
-                ...(skin ? { skin } : {}),
-                ...(offset ? { offset } : {})
-            }} : {})
+            ...(champion || skin || offset ? {
+                cover: {
+                    ...(champion ? { champion } : {}),
+                    ...(skin ? { skin } : {}),
+                    ...(offset ? { offset } : {})
+                }
+            } : {})
         }
         db.collection("teams").doc(name).update(cleanInput)
             .then(() => {
@@ -303,42 +303,6 @@ export const EditTeam = ({ isOpen, onClose, team, users, playersList }) => {
                                 <FormControl mt={4}>
                                     <FormLabel>Change Cover</FormLabel>
                                     <SelectChampion setCover={setCover} />
-                                </FormControl>
-                                <FormControl mt={4}>
-                                    <FormLabel>Add Members</FormLabel>
-                                    <FieldArray name="players">
-                                        {({ push, remove }) => {
-                                            return (
-                                                <>
-                                                    {props.values.players.map((player, i) => {
-                                                        return (
-                                                            <Flex mt={4} key={i}>
-                                                                <Field name={`players.${i}`} key={i} type="select" as={Select} placeholder={playersList && playersList[i] ? playersList[i].username : "Select Player"}>
-                                                                    {users && users?.map((user, i) => {
-                                                                        return !user.team && <option key={i} value={user.id}>
-                                                                            {user.username}
-                                                                            {" -> "}
-                                                                            {user.role ? user.role : "No Role"}
-                                                                        </option>
-                                                                    })}
-                                                                </Field>
-                                                                <Button ml={4} colorScheme="red" onClick={() => remove(i)}>Delete</Button>
-                                                            </Flex>
-                                                        )
-                                                    })}
-                                                    <Button mt={4} onClick={() => push("")}>Add More Players</Button>
-                                                </>
-                                            )
-                                        }}
-                                    </FieldArray>
-                                </FormControl>
-                                <FormControl mt={4}>
-                                    <FormLabel>Select Captain</FormLabel>
-                                    <Field name="captain" type="select" as={Select} placeholder="Select Captain">
-                                        {users && users[0] && users.map((user, i) => {
-                                            return props.values.players.includes(user.id) && <option key={i} value={user.id}>{user.username}</option>
-                                        })}
-                                    </Field>
                                 </FormControl>
                             </ModalBody>
                             <ModalFooter>
