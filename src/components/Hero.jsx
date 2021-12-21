@@ -21,6 +21,7 @@ const Hero = ({ info }) => {
 					w="350px"
 					h="500px"
 					borderRadius="lg"
+					alt={info.champion}
 				/>
 			</AspectRatio>
 			<Text fontWeight="bold" alignSelf="flex-end" justifySelf={["right", "right", "auto"]} mr={["1rem", "1rem", "0"]} fontStyle="italic" mb="1rem" pos={["absolute", "absolute", "static"]}>{info.date} <br /> {info.team1} <br /> vs <br /> {info.team2}</Text>
