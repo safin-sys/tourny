@@ -7,7 +7,7 @@ const Pill = ({ children }) => {
             color="white"
             p="2px 8px"
             borderRadius="8px"
-            fontSize="label.sm"
+            fontSize={["label.sm", "label.lg"]}
             fontWeight="bold"
             lineHeight="1"
             w="max"

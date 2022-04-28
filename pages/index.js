@@ -6,7 +6,7 @@ import Footer from "../src/components/shared/Footer";
 
 export default function Home() {
 	return (
-		<Container maxW="container.xl">
+		<Container>
 			<Nav />
 			<Hero />
 			<OngoingTournament />

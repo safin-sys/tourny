@@ -12,11 +12,13 @@ const HeroImage = ({
 }) => {
     return (
         <Box pos="relative" borderRadius="8px" overflow="hidden" fontSize="0">
-            <TournyImage
-                championName={championName}
-                skinID={skinID}
-                objectPosition={objectPosition}
-            />
+            <Box h="80vh">
+                <TournyImage
+                    championName={championName}
+                    skinID={skinID}
+                    objectPosition={objectPosition}
+                />
+            </Box>
             <Box
                 bgGradient="linear(to-b, transparent, rgba(0,0,0,0.5))"
                 pos="absolute"

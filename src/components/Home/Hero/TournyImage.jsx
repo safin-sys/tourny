@@ -9,8 +9,7 @@ const TournyImage = ({ championName, skinID, objectPosition }) => {
             src={getChampionImageUrl(championName, skinID)}
             alt={championName}
             objectFit="cover"
-            width={1000}
-            height={1800}
+            layout="fill"
             onLoadingComplete={() => setLoading(false)}
             objectPosition={objectPosition ? objectPosition : "center"}
             style={{
