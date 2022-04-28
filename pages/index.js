@@ -1,18 +1,16 @@
-import Hero from "../src/components/Hero";
-
-const info = {
-	playerName: 'SafinTheShip',
-	playerScore: '14/5/6',
-	champion: 'Yone',
-	date: '29/02/2019',
-	team1: 'Nihilists',
-	team2: 'Stoics'
-}
+import { Box, Container } from "@chakra-ui/react";
+import Hero from "../src/components/Home/Hero";
+import Nav from "../src/components/shared/Nav";
+import OngoingTournament from "../src/components/Home/OngoingTournament";
+import Footer from "../src/components/shared/Footer";
 
 export default function Home() {
 	return (
-		<>
-			<Hero info={info} />
-		</>
+		<Container maxW="container.xl">
+			<Nav />
+			<Hero />
+			<OngoingTournament />
+			<Footer />
+		</Container>
 	)
 }
