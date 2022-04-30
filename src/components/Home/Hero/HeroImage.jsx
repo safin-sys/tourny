@@ -12,7 +12,7 @@ const HeroImage = ({
 }) => {
     return (
         <Box pos="relative" borderRadius="8px" overflow="hidden" fontSize="0">
-            <Box h="80vh">
+            <Box h="80vh" pos="relative">
                 <TournyImage
                     championName={championName}
                     skinID={skinID}

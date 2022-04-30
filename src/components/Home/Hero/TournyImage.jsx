@@ -6,6 +6,7 @@ const TournyImage = ({ championName, skinID, objectPosition }) => {
     const [loading, setLoading] = useState(true);
     return (
         <Image
+            priority
             src={getChampionImageUrl(championName, skinID)}
             alt={championName}
             objectFit="cover"
@@ -15,9 +16,7 @@ const TournyImage = ({ championName, skinID, objectPosition }) => {
             style={{
                 filter: loading ? "grayscale(50%) blur(5px)" : "none",
                 transform: loading ? "scale(1.1)" : "scale(1)",
-                transition: "all 0.7s",
-                position: "absolute",
-            }}
+                transition: "all 0.7s"            }}
         />
     );
 };

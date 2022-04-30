@@ -13,6 +13,7 @@ const OngoingTournament = () => {
                 mt=".5rem"
                 borderRadius="8px"
                 overflow="hidden"
+                pos="relative"
             >
                 <TournamentBanner
                     championName="LeeSin"

@@ -4,7 +4,7 @@ import { useState } from "react";
 import getChampionImageUrl from "../../utils/getChampionImageUrl";
 
 const TournamentBanner = ({ championName, skinID, objectPosition }) => {
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
     return (
         <Box>
             <Image
@@ -18,7 +18,6 @@ const TournamentBanner = ({ championName, skinID, objectPosition }) => {
                     filter: loading ? "grayscale(50%) blur(5px)" : "none",
                     transform: loading ? "scale(1.1)" : "scale(1)",
                     transition: "all 0.7s",
-                    position: "absolute",
                 }}
             />
         </Box>

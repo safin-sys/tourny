@@ -1,15 +1,13 @@
 import { Container } from "@chakra-ui/react";
-import Hero from "../src/components/Home/Hero";
 import Nav from "../src/components/shared/Nav";
-import OngoingTournament from "../src/components/Home/OngoingTournament";
 import Footer from "../src/components/shared/Footer";
+import { SignupForm } from "../src/components/SignUp/SignupForm";
 
-export default function Home() {
+export default function Signup() {
 	return (
 		<Container>
 			<Nav />
-			<Hero />
-			<OngoingTournament />
+			<SignupForm />
 			<Footer />
 		</Container>
 	)

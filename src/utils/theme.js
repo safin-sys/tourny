@@ -3,6 +3,10 @@ import "@fontsource/pacifico"
 import "@fontsource/nunito"
 
 const theme = extendTheme({
+    config: {
+        initialColorMode: "system",
+        useSystemColorMode: true,
+    },
     fonts: {
         logo: 'Pacifico, sans-serif',
         heading: 'Nunito, sans-serif',
