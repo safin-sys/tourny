@@ -49,7 +49,6 @@ export const SignupForm = () => {
                 message: "Email already in use"
             });
         }
-        console.log(user);
     };
     return (
         <Grid alignItems="center" minH="calc(100vh - 192px)">

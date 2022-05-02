@@ -6,23 +6,50 @@ import {
     Link as ChakraLink,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { login } from "../../utils/validation";
+import { loginVal } from "../../utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { FormControlComponent } from "../shared/FormControlComponent";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { useState } from "react";
+import { login } from "../../libs/firebase/auth";
+import { useRouter } from "next/router";
+import { signOut } from "firebase/auth";
+import { auth } from "../../libs/firebase";
 
 export const LoginForm = () => {
+    const [btnLoading, setBtnLoading] = useState(false);
     const {
         register,
         handleSubmit,
         formState: { errors },
+        setError,
     } = useForm({
-        resolver: yupResolver(login),
+        resolver: yupResolver(loginVal),
     });
 
-    const onSubmit = (e) => {
-        console.log(e);
+    const router = useRouter();
+
+    const onSubmit = async (e) => {
+        setBtnLoading(true);
+        const { email, password } = e;
+        const promise = await login(email, password);
+        const user = await promise;
+        if (user.user?.email) {
+            setBtnLoading(false);
+            router.push("/");
+        }
+        if (user === "auth/user-not-found" || user === "auth/wrong-password") {
+            setBtnLoading(false);
+            setError("email", {
+                type: "manual",
+                message: "Email or password is incorrect",
+            });
+            setError("password", {
+                type: "manual",
+                message: "Email or password is incorrect",
+            });
+        }
     };
     return (
         <Grid alignItems="center" minH="calc(100vh - 192px)">
@@ -60,15 +87,11 @@ export const LoginForm = () => {
                     alignItems="center"
                     gap="1rem"
                 >
-                    <Flex
-                        flexDir="column"
-                    >
+                    <Flex flexDir="column">
                         <Link href="/signup" passHref>
-                            <ChakraLink>
-                                Dont have an account?
-                            </ChakraLink>
+                            <ChakraLink>Dont have an account?</ChakraLink>
                         </Link>
-                        <Link href="/signup" passHref>
+                        <Link href="/login/forgot" passHref>
                             <ChakraLink>Forgot password?</ChakraLink>
                         </Link>
                     </Flex>
@@ -76,6 +99,7 @@ export const LoginForm = () => {
                         colorScheme="twitter"
                         w="max"
                         type="submit"
+                        isLoading={btnLoading}
                     >
                         Login
                         <AiOutlineArrowRight style={{ marginLeft: ".5em" }} />

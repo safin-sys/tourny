@@ -11,16 +11,18 @@ function MyApp({ Component, pageProps }) {
 	useEffect(() => {
 		if (!store.getState().user) {
 			onAuthStateChanged(auth, user => {
-				store.dispatch({
-					type: 'user/setUser',
-					payload: {
-						email: user.email,
-						uid: user.uid,
-						displayName: user.displayName,
-						photoURL: user.photoURL,
-						phoneNumber: user.phoneNumber,
-					}
-				})
+				if (user) {
+					store.dispatch({
+						type: 'user/setUser',
+						payload: {
+							email: user.email,
+							uid: user.uid,
+							displayName: user.displayName,
+							photoURL: user.photoURL,
+							phoneNumber: user.phoneNumber,
+						}
+					})
+				}
 			})
 		}
 	}, [])
