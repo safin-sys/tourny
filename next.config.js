@@ -3,5 +3,6 @@ module.exports = {
   images: {
     domains: ['ddragon.leagueoflegends.com'],
   },
-  swcMinify: true
+  swcMinify: true,
+  productionBrowserSourceMaps: true
 }

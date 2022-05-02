@@ -19,8 +19,7 @@ const theme = extendTheme({
             lg: "1.375rem",
         },
         label: {
-            sm: "0.6875rem",
-            md: "0.75rem",
+            sm: "0.75rem",
             lg: "0.875rem",
         },
         body: {

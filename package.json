@@ -14,12 +14,14 @@
     "@fontsource/nunito": "^4.5.8",
     "@fontsource/pacifico": "^4.5.5",
     "@hookform/resolvers": "^2.8.8",
+    "@reduxjs/toolkit": "^1.8.1",
     "firebase": "^9.7.0",
     "framer-motion": "^6",
     "next": "12.1.5",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-hook-form": "^7.30.0",
+    "react-redux": "^8.0.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {

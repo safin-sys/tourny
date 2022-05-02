@@ -6,7 +6,7 @@ import {
     Link as ChakraLink,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { signup } from "../../utils/validation";
+import { login } from "../../utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { FormControlComponent } from "../shared/FormControlComponent";
@@ -18,7 +18,7 @@ export const LoginForm = () => {
         handleSubmit,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(signup),
+        resolver: yupResolver(login),
     });
 
     const onSubmit = (e) => {

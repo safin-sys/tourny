@@ -3,7 +3,7 @@ import { Text } from "@chakra-ui/react";
 const Pill = ({ children }) => {
     return (
         <Text
-            bgColor="blue.400"
+            bgColor="blue.600"
             color="white"
             p="2px 8px"
             borderRadius="8px"

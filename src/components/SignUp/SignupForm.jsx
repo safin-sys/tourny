@@ -1,28 +1,55 @@
 import {
     Button,
     Flex,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
     Grid,
     Heading,
+    Input,
     Link as ChakraLink,
+    Tooltip,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { signup } from "../../utils/validation";
+import { signupVal } from "../../utils/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { FormControlComponent } from "../shared/FormControlComponent";
-import { AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineInfoCircle } from "react-icons/ai";
+import { signup } from "../../libs/firebase/auth";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 export const SignupForm = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
+        setError
     } = useForm({
-        resolver: yupResolver(signup),
+        resolver: yupResolver(signupVal),
     });
 
-    const onSubmit = (e) => {
-        console.log(e);
+    const [btnLoading, setBtnLoading] = useState(false);
+    
+    const router = useRouter()
+    const onSubmit = async (e) => {
+        setBtnLoading(true);
+        const { name, email, password } = e;
+        const promise = await signup(name, email, password);
+        const user = await promise;
+        if (user.email) {
+            setBtnLoading(false);
+            router.push("/");
+        }
+        if(user === "auth/email-already-in-use"){
+            setBtnLoading(false);
+            setError("email", {
+                type: "manual",
+                message: "Email already in use"
+            });
+        }
+        console.log(user);
     };
     return (
         <Grid alignItems="center" minH="calc(100vh - 192px)">
@@ -42,6 +69,25 @@ export const SignupForm = () => {
                 >
                     SignUp
                 </Heading>
+                <FormControl isInvalid={errors.name}>
+                    <Tooltip
+                        label="IGN is your In Game Name"
+                        placement="bottom-start"
+                    >
+                        <FormLabel
+                            htmlFor="name"
+                            display="flex"
+                            alignItems="center"
+                        >
+                            IGN
+                            <AiOutlineInfoCircle
+                                style={{ marginLeft: ".25rem" }}
+                            />
+                        </FormLabel>
+                    </Tooltip>
+                    <Input id="name" type="text" {...register("name")} />
+                    <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+                </FormControl>
                 <FormControlComponent
                     isInvalid={errors.email}
                     label="Email"
@@ -71,14 +117,13 @@ export const SignupForm = () => {
                     gap="1rem"
                 >
                     <Link href="/login" passHref>
-                        <ChakraLink>
-                            Already have an account?
-                        </ChakraLink>
+                        <ChakraLink>Already have an account?</ChakraLink>
                     </Link>
                     <Button
                         colorScheme="twitter"
                         w="max"
                         type="submit"
+                        isLoading={btnLoading}
                     >
                         SignUp
                         <AiOutlineArrowRight style={{ marginLeft: ".5em" }} />
