@@ -12,11 +12,15 @@ import {
     DrawerFooter,
     Button,
 } from "@chakra-ui/react";
+import { signOut } from "firebase/auth";
 import Link from "next/link";
 import { BsSun, BsMoon } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import { auth } from "../../../libs/firebase";
 
 export const MobileDrawer = ({ isOpen, onClose }) => {
     const { colorMode, toggleColorMode } = useColorMode();
+    const user = useSelector((state) => state.user);
     return (
         <Drawer isOpen={isOpen} onClose={onClose}>
             <DrawerOverlay />
@@ -30,20 +34,7 @@ export const MobileDrawer = ({ isOpen, onClose }) => {
                     </Link>
                 </DrawerBody>
                 <DrawerFooter justifyContent="space-between">
-                    <Flex gap="1rem">
-                        <Link href="/signup" passHref>
-                            <ChakraLink>
-                                <Button colorScheme="twitter">SignUp</Button>
-                            </ChakraLink>
-                        </Link>
-                        <Link href="/login" passHref>
-                            <ChakraLink>
-                                <Button colorScheme="twitter" variant="outline">
-                                    Login
-                                </Button>
-                            </ChakraLink>
-                        </Link>
-                    </Flex>
+                    {user ? <LoggedInFooter /> : <LoggedOutFooter />}
                     <IconButton
                         aria-label="Theme Toggle"
                         onClick={toggleColorMode}
@@ -53,5 +44,46 @@ export const MobileDrawer = ({ isOpen, onClose }) => {
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>
+    );
+};
+
+const LoggedOutFooter = () => {
+    return (
+        <Flex gap="1rem">
+            <Link href="/signup" passHref>
+                <ChakraLink>
+                    <Button colorScheme="twitter">SignUp</Button>
+                </ChakraLink>
+            </Link>
+            <Link href="/login" passHref>
+                <ChakraLink>
+                    <Button colorScheme="twitter" variant="outline">
+                        Login
+                    </Button>
+                </ChakraLink>
+            </Link>
+        </Flex>
+    );
+};
+
+const LoggedInFooter = () => {
+    const handleLogout = () => {
+        signOut(auth);
+    }
+    return (
+        <Flex gap="1rem">
+            <Link href="/profile" passHref>
+                <ChakraLink>
+                    <Button colorScheme="twitter">Profile</Button>
+                </ChakraLink>
+            </Link>
+            <Button
+                colorScheme="twitter"
+                variant="outline"
+                onClick={handleLogout}
+            >
+                Logout
+            </Button>
+        </Flex>
     );
 };

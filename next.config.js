@@ -4,5 +4,4 @@ module.exports = {
     domains: ['ddragon.leagueoflegends.com'],
   },
   swcMinify: true,
-  productionBrowserSourceMaps: true
 }

@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 
 const Nav = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const user = useSelector((state) => state.user);
     return (
         <Flex justifyContent="space-between" alignItems="center" h="4rem">
             <Link href="/" passHref>
