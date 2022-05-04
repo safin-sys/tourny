@@ -51,8 +51,9 @@ export const MobileDrawer = ({ isOpen, onClose }) => {
 };
 
 const LoggedOutFooter = () => {
+    const { colorMode, toggleColorMode } = useColorMode();
     return (
-        <Flex gap="1rem">
+        <Flex gap="1rem" w="full">
             <Link href="/signup" passHref>
                 <ChakraLink>
                     <Button colorScheme="twitter">SignUp</Button>
@@ -65,6 +66,13 @@ const LoggedOutFooter = () => {
                     </Button>
                 </ChakraLink>
             </Link>
+            <IconButton
+                ml="auto"
+                aria-label="Theme Toggle"
+                onClick={toggleColorMode}
+            >
+                {colorMode === "light" ? <BsMoon /> : <BsSun />}
+            </IconButton>
         </Flex>
     );
 };
