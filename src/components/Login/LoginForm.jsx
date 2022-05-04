@@ -4,6 +4,7 @@ import {
     Grid,
     Heading,
     Link as ChakraLink,
+    useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { loginVal } from "../../utils/validation";
@@ -29,6 +30,7 @@ export const LoginForm = () => {
     });
 
     const router = useRouter();
+    const toast = useToast();
 
     const onSubmit = async (e) => {
         setBtnLoading(true);
@@ -38,6 +40,13 @@ export const LoginForm = () => {
         if (user.user?.email) {
             setBtnLoading(false);
             router.push("/");
+            toast({
+                title: "Success",
+                description: "You have successfully logged in",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+            });
         }
         if (user === "auth/user-not-found" || user === "auth/wrong-password") {
             setBtnLoading(false);

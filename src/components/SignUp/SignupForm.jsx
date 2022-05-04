@@ -9,6 +9,7 @@ import {
     Input,
     Link as ChakraLink,
     Tooltip,
+    useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { signupVal } from "../../utils/validation";
@@ -33,6 +34,8 @@ export const SignupForm = () => {
     const [btnLoading, setBtnLoading] = useState(false);
     
     const router = useRouter()
+    const toast = useToast()
+
     const onSubmit = async (e) => {
         setBtnLoading(true);
         const { name, email, password } = e;
@@ -41,6 +44,13 @@ export const SignupForm = () => {
         if (user.email) {
             setBtnLoading(false);
             router.push("/");
+            toast({
+                title: "Success",
+                description: "You have successfully signed up",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+            });
         }
         if(user === "auth/email-already-in-use"){
             setBtnLoading(false);

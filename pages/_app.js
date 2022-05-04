@@ -12,14 +12,14 @@ function MyApp({ Component, pageProps }) {
 		if (!store.getState().user) {
 			onAuthStateChanged(auth, user => {
 				if (user) {
+					const { email, displayName, uid, photoURL } = user
 					store.dispatch({
 						type: 'user/setUser',
 						payload: {
-							email: user.email,
-							uid: user.uid,
-							displayName: user.displayName,
-							photoURL: user.photoURL,
-							phoneNumber: user.phoneNumber,
+							email,
+							displayName,
+							uid,
+							photoURL
 						}
 					})
 				}

@@ -11,15 +11,20 @@ import {
     DrawerBody,
     DrawerFooter,
     Button,
+    Avatar,
+    Box,
+    Text,
+    Grid,
+    useToast,
 } from "@chakra-ui/react";
 import { signOut } from "firebase/auth";
 import Link from "next/link";
 import { BsSun, BsMoon } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { auth } from "../../../libs/firebase";
+import { clearUser } from "../../../redux/slices/userSlice";
 
 export const MobileDrawer = ({ isOpen, onClose }) => {
-    const { colorMode, toggleColorMode } = useColorMode();
     const user = useSelector((state) => state.user);
     return (
         <Drawer isOpen={isOpen} onClose={onClose}>
@@ -33,14 +38,12 @@ export const MobileDrawer = ({ isOpen, onClose }) => {
                         </ChakraLink>
                     </Link>
                 </DrawerBody>
-                <DrawerFooter justifyContent="space-between">
-                    {user ? <LoggedInFooter /> : <LoggedOutFooter />}
-                    <IconButton
-                        aria-label="Theme Toggle"
-                        onClick={toggleColorMode}
-                    >
-                        {colorMode === "light" ? <BsMoon /> : <BsSun />}
-                    </IconButton>
+                <DrawerFooter justifyContent="space-between" alignItems="end">
+                    {user ? (
+                        <LoggedInFooter user={user} />
+                    ) : (
+                        <LoggedOutFooter />
+                    )}
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>
@@ -66,24 +69,62 @@ const LoggedOutFooter = () => {
     );
 };
 
-const LoggedInFooter = () => {
+const LoggedInFooter = ({ user }) => {
+    const dispatch = useDispatch();
+    const toast = useToast();
     const handleLogout = () => {
         signOut(auth);
-    }
+        dispatch(clearUser());
+        toast({
+            title: "Logged out",
+            description: "You have been logged out",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+        });
+    };
+    const { colorMode, toggleColorMode } = useColorMode();
     return (
-        <Flex gap="1rem">
+        <Grid rowGap="1rem" w="full">
             <Link href="/profile" passHref>
-                <ChakraLink>
-                    <Button colorScheme="twitter">Profile</Button>
+                <ChakraLink _hover={{ textDecor: "none", bgColor: "gray.800" }}>
+                    <Flex alignItems="center" gap=".5rem">
+                        <Avatar
+                            name={user.displayName}
+                            src={
+                                user.photoURL
+                                    ? user.photoURL
+                                    : "https://ddragon.leagueoflegends.com/cdn/12.8.1/img/profileicon/69.png"
+                            }
+                        />
+                        <Box>
+                            <Text>{user.displayName}</Text>
+                            <Text>{user.email}</Text>
+                        </Box>
+                    </Flex>
                 </ChakraLink>
             </Link>
-            <Button
-                colorScheme="twitter"
-                variant="outline"
-                onClick={handleLogout}
-            >
-                Logout
-            </Button>
-        </Flex>
+            <Flex gap="1rem">
+                <Link href="/profile" passHref>
+                    <ChakraLink>
+                        <Button colorScheme="twitter">Profile</Button>
+                    </ChakraLink>
+                </Link>
+                <Button
+                    colorScheme="twitter"
+                    variant="outline"
+                    onClick={handleLogout}
+                >
+                    Logout
+                </Button>
+                <IconButton
+                    ml="auto"
+                    aria-label="Theme Toggle"
+                    onClick={toggleColorMode}
+                >
+                    {colorMode === "light" ? <BsMoon /> : <BsSun />}
+                </IconButton>
+            </Flex>
+        </Grid>
     );
 };
