@@ -13,7 +13,7 @@ export default function Signup() {
 		if (user?.email) {
 			router.push("/");
 		}
-	}, [user]);
+	}, [user, router]);
 	return (
 		<Container>
 			<Nav />

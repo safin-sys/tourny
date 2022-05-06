@@ -16,7 +16,7 @@ export default function Player() {
 				setPlayer(user);
 			})
 		}
-	}, [player, router.isReady]);
+	}, [player, router.isReady, router.query.id]);
 	return (
 		<Container>
 			<Nav />
