@@ -94,17 +94,10 @@ const LoggedInFooter = ({ user }) => {
     const { colorMode, toggleColorMode } = useColorMode();
     return (
         <Grid rowGap="1rem" w="full">
-            <Link href="/profile" passHref>
+            <Link href={`/players/${user.uid}`} passHref>
                 <ChakraLink _hover={{ textDecor: "none", bgColor: "gray.800" }}>
                     <Flex alignItems="center" gap=".5rem">
-                        <Avatar
-                            name={user.displayName}
-                            src={
-                                user.photoURL
-                                    ? user.photoURL
-                                    : "https://ddragon.leagueoflegends.com/cdn/12.8.1/img/profileicon/69.png"
-                            }
-                        />
+                        <Avatar name={user.displayName} src={user.photoURL} />
                         <Box>
                             <Text>{user.displayName}</Text>
                             <Text>{user.email}</Text>
@@ -113,7 +106,7 @@ const LoggedInFooter = ({ user }) => {
                 </ChakraLink>
             </Link>
             <Flex gap="1rem">
-                <Link href="/profile" passHref>
+                <Link href={`/players/${user.uid}`} passHref>
                     <ChakraLink>
                         <Button colorScheme="twitter">Profile</Button>
                     </ChakraLink>

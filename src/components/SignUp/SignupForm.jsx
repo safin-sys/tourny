@@ -20,6 +20,7 @@ import { AiOutlineArrowRight, AiOutlineInfoCircle } from "react-icons/ai";
 import { signup } from "../../libs/firebase/auth";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { createUserOnFirestore } from "../../libs/firebase/db";
 
 export const SignupForm = () => {
     const {
@@ -42,6 +43,7 @@ export const SignupForm = () => {
         const promise = await signup(name, email, password);
         const user = await promise;
         if (user.email) {
+            createUserOnFirestore(user);
             setBtnLoading(false);
             router.push("/");
             toast({

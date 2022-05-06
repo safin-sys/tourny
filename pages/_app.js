@@ -1,9 +1,10 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import Head from 'next/head'
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { auth } from '../src/libs/firebase';
+import { auth, db } from '../src/libs/firebase';
 import { store } from '../src/redux/store';
 import theme from "../src/utils/theme";
 
@@ -12,14 +13,20 @@ function MyApp({ Component, pageProps }) {
 		if (!store.getState().user) {
 			onAuthStateChanged(auth, user => {
 				if (user) {
-					const { email, displayName, uid, photoURL } = user
-					store.dispatch({
-						type: 'user/setUser',
-						payload: {
-							email,
-							displayName,
-							uid,
-							photoURL
+					const userDoc = doc(db, 'users', user.uid);
+					getDoc(userDoc).then(userDoc => {
+						if (userDoc.exists()) {
+							store.dispatch({
+								type: 'user/setUser',
+								payload: {
+									email: userDoc.data().email,
+									displayName: userDoc.data().name,
+									uid: user.uid,
+									photoURL: userDoc.data().profilePicture ? userDoc.data().profilePicture : "https://ddragon.leagueoflegends.com/cdn/12.8.1/img/profileicon/0.png"
+								}
+							})
+						} else {
+							console.log('user not found');
 						}
 					})
 				}
