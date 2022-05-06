@@ -10,8 +10,8 @@ import Image from "next/image";
 
 const PlayerHeader = ({ player }) => {
     console.log(player);
-    const { name, email, profilePicture, coverPicture, team, phoneNumber } =
-        player;
+    const { name, email, profilePicture, coverPicture,  phoneNumber } =
+        player ? player : {};
     return (
         <Box>
             <Flex flexDir="column" pos="relative">

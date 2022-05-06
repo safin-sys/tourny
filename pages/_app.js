@@ -26,7 +26,12 @@ function MyApp({ Component, pageProps }) {
 								}
 							})
 						} else {
-							console.log('user not found');
+							return {
+								email: user.email,
+								displayName: user.displayName,
+								uid: user.uid,
+								photoURL: user.photoURL
+							}
 						}
 					})
 				}
