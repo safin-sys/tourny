@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }) {
 		<>
 			<Head>
 				<title>{Component.title ? Component.title : "Tourny"}</title>
-				<link rel="shortcut icon" href="favicon.svg" type="image/x-icon" />
+				<link rel="shortcut icon" href="/favicon.svg" type="image/x-icon" />
 				<meta name="title" content="Tourny" />
 				<meta name="description" content="League of Legends tournament manager" />
 
