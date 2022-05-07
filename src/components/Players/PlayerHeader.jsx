@@ -9,14 +9,22 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { auth } from "../../libs/firebase";
 
 const PlayerHeader = ({ player }) => {
-    const { name, email, profilePicture, coverPicture, phoneNumber } = player
-        ? player
-        : {};
+    const { name, email, profilePicture, coverPicture, phoneNumber, uid } =
+        player ? player : {};
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        if (auth && auth.currentUser && auth.currentUser.uid === uid) {
+            setIsLoggedIn(true);
+        }
+    }, [player, auth]);
     return (
         <Box>
-            <Flex flexDir="column" pos="relative">
+            <Flex flexDir="column" pos="relative" h="196px">
                 <Skeleton isLoaded={coverPicture || coverPicture === null}>
                     <AspectRatio
                         pos="relative"
@@ -58,17 +66,19 @@ const PlayerHeader = ({ player }) => {
                         }
                     />
                 </Skeleton>
-                <Button
-                    m="1rem 0 0 auto"
-                    variant="outline"
-                    colorScheme="twitter"
-                    p="8px"
-                    lineHeight="3"
-                    h="auto"
-                    borderRadius="4px"
-                >
-                    Edit Profile
-                </Button>
+                {isLoggedIn && (
+                    <Button
+                        m="1rem 0 0 auto"
+                        variant="outline"
+                        colorScheme="twitter"
+                        p="8px"
+                        lineHeight="3"
+                        h="auto"
+                        borderRadius="4px"
+                    >
+                        Edit Profile
+                    </Button>
+                )}
             </Flex>
             <Box m="1.5rem 0 0 1rem">
                 <Skeleton isLoaded={name}>

@@ -13,7 +13,10 @@ export default function Player() {
 	useEffect(() => {
 		if (router.query.id && !player) {
 			getUserFromFirestore(router.query.id).then((user) => {
-				setPlayer(user);
+				setPlayer({
+					...user,
+					uid: router.query.id,
+				});
 			})
 		}
 	}, [player, router.isReady, router.query.id]);
