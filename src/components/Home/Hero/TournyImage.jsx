@@ -11,12 +11,13 @@ const TournyImage = ({ championName, skinID, objectPosition }) => {
             alt={championName}
             objectFit="cover"
             layout="fill"
-            onLoadingComplete={() => setLoading(false)}
             objectPosition={objectPosition ? objectPosition : "center"}
+            onLoadingComplete={() => setLoading(false)}
             style={{
                 filter: loading ? "grayscale(50%) blur(5px)" : "none",
                 transform: loading ? "scale(1.1)" : "scale(1)",
-                transition: "all 0.7s"            }}
+                transition: "all 0.7s",
+            }}
         />
     );
 };

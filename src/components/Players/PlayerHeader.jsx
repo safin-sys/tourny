@@ -16,6 +16,7 @@ const PlayerHeader = ({ player }) => {
         player ? player : {};
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [coverLoading, setCoverLoading] = useState(true);
 
     useEffect(() => {
         if (auth && auth.currentUser && auth.currentUser.uid === uid) {
@@ -25,29 +26,35 @@ const PlayerHeader = ({ player }) => {
     return (
         <Box>
             <Flex flexDir="column" pos="relative" h="196px">
-                <Skeleton isLoaded={coverPicture || coverPicture === null}>
-                    <AspectRatio
-                        pos="relative"
-                        ratio={2.2 / 1}
-                        w="100%"
-                        h="150px"
-                        borderRadius="8px"
-                        overflow="hidden"
-                    >
-                        <Image
-                            src={
-                                coverPicture
-                                    ? coverPicture
-                                    : "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Lucian_6.jpg"
-                            }
-                            alt="Lucian"
-                            layout="fill"
-                            objectFit="cover"
-                            objectPosition="0 0"
-                            priority
-                        />
-                    </AspectRatio>
-                </Skeleton>
+                <AspectRatio
+                    pos="relative"
+                    ratio={2.2 / 1}
+                    w="100%"
+                    h="150px"
+                    borderRadius="8px"
+                    overflow="hidden"
+                >
+                    <Image
+                        src={
+                            coverPicture
+                                ? coverPicture
+                                : "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Lucian_6.jpg"
+                        }
+                        alt="Lucian"
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="0 0"
+                        priority
+                        onLoadingComplete={() => setCoverLoading(false)}
+                        style={{
+                            filter: coverLoading
+                                ? "grayscale(50%) blur(5px)"
+                                : "none",
+                            transform: coverLoading ? "scale(1.1)" : "scale(1)",
+                            transition: "all 0.7s",
+                        }}
+                    />
+                </AspectRatio>
                 <Skeleton
                     isLoaded={profilePicture || profilePicture === null}
                     pos="absolute"
