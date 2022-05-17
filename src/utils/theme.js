@@ -1,10 +1,10 @@
-import { extendTheme } from "@chakra-ui/react";
 import "@fontsource/pacifico"
 import "@fontsource/nunito"
+import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
     config: {
-        initialColorMode: "system",
+        initialColorMode: "light",
         useSystemColorMode: true,
     },
     fonts: {
