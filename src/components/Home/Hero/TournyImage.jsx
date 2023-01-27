@@ -9,14 +9,15 @@ const TournyImage = ({ championName, skinID, objectPosition }) => {
             priority
             src={getChampionImageUrl(championName, skinID)}
             alt={championName}
-            objectFit="cover"
-            layout="fill"
-            objectPosition={objectPosition ? objectPosition : "center"}
+            fill
+            sizes="100%"
             onLoadingComplete={() => setLoading(false)}
             style={{
                 filter: loading ? "grayscale(50%) blur(5px)" : "none",
                 transform: loading ? "scale(1.1)" : "scale(1)",
                 transition: "all 0.7s",
+                objectFit: "cover",
+                objectPosition: objectPosition || "center",
             }}
         />
     );

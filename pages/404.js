@@ -12,8 +12,8 @@ export default function NotFound() {
                 <Flex flexDir="column" alignItems="center">
                     <Image
                         src="/images/404.webp"
-                        height="100px"
-                        width="100px"
+                        height="100"
+                        width="100"
                         alt="404"
                         priority
                     />

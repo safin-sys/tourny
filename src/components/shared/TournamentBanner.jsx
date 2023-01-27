@@ -10,14 +10,15 @@ const TournamentBanner = ({ championName, skinID, objectPosition }) => {
             <Image
                 src={getChampionImageUrl(championName, skinID)}
                 alt={championName}
-                objectFit="cover"
-                layout="fill"
+                fill
+                sizes="100%"
                 onLoadingComplete={() => setLoading(false)}
-                objectPosition={objectPosition ? objectPosition : "center"}
                 style={{
                     filter: loading ? "grayscale(50%) blur(5px)" : "none",
                     transform: loading ? "scale(1.1)" : "scale(1)",
                     transition: "all 0.7s",
+                    objectFit: "cover",
+                    objectPosition: objectPosition || "center",
                 }}
             />
         </Box>

@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { resetPassword } from "../../libs/firebase/auth";
+import { resetPassword } from "../../utils/firebase/auth";
 import { emailVal } from "../../utils/validation";
 import { FormControlComponent } from "../shared/FormControlComponent";
 

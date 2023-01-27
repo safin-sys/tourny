@@ -3,7 +3,7 @@ import Nav from "../../src/components/shared/Nav";
 import Footer from "../../src/components/shared/Footer";
 import PlayerHeader from "../../src/components/Players/PlayerHeader";
 import { useEffect, useState } from "react";
-import { getUserFromFirestore } from "../../src/libs/firebase/db";
+import { getUserFromFirestore } from "../../src/utils/firebase/db";
 import { useRouter } from "next/router";
 
 export default function Player() {

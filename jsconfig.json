@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "baseUrl": "./",
+        "moduleResolution": "node",
+        "paths": {
+            "@components/*": ["./src/components/*"],
+            "@redux/*": ["./src/redux/*"],
+            "@utils/*": ["./src/utils/*"]
+        }
+    },
+    "exclude": ["node_modules", "build"]
+}

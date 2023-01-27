@@ -6,7 +6,6 @@ import {
     Flex,
     IconButton,
     useColorMode,
-    Link as ChakraLink,
     Heading,
     DrawerBody,
     DrawerFooter,
@@ -21,7 +20,7 @@ import { signOut } from "firebase/auth";
 import Link from "next/link";
 import { BsSun, BsMoon } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import { auth } from "../../../libs/firebase";
+import { auth } from "../../../utils/firebase";
 import { clearUser } from "../../../redux/slices/userSlice";
 
 export const MobileDrawer = ({ isOpen, onClose }) => {
@@ -33,9 +32,7 @@ export const MobileDrawer = ({ isOpen, onClose }) => {
                 <DrawerCloseButton />
                 <DrawerBody mt="4rem">
                     <Link href="/" passHref>
-                        <ChakraLink>
-                            <Heading fontSize="title.lg">Home</Heading>
-                        </ChakraLink>
+                        <Heading fontSize="title.lg">Home</Heading>
                     </Link>
                 </DrawerBody>
                 <DrawerFooter justifyContent="space-between" alignItems="end">
@@ -54,17 +51,13 @@ const LoggedOutFooter = () => {
     const { colorMode, toggleColorMode } = useColorMode();
     return (
         <Flex gap="1rem" w="full">
-            <Link href="/signup" passHref>
-                <ChakraLink>
-                    <Button colorScheme="twitter">SignUp</Button>
-                </ChakraLink>
+            <Link href="/auth/join" passHref>
+                <Button colorScheme="twitter">Join</Button>
             </Link>
-            <Link href="/login" passHref>
-                <ChakraLink>
-                    <Button colorScheme="twitter" variant="outline">
-                        Login
-                    </Button>
-                </ChakraLink>
+            <Link href="/auth/login" passHref>
+                <Button colorScheme="twitter" variant="outline">
+                    Login
+                </Button>
             </Link>
             <IconButton
                 ml="auto"
@@ -95,21 +88,17 @@ const LoggedInFooter = ({ user }) => {
     return (
         <Grid rowGap="1rem" w="full">
             <Link href={`/players/${user.uid}`} passHref>
-                <ChakraLink _hover={{ textDecor: "none", bgColor: "gray.800" }}>
-                    <Flex alignItems="center" gap=".5rem">
-                        <Avatar name={user.displayName} src={user.photoURL} />
-                        <Box>
-                            <Text>{user.displayName}</Text>
-                            <Text>{user.email}</Text>
-                        </Box>
-                    </Flex>
-                </ChakraLink>
+                <Flex alignItems="center" gap=".5rem">
+                    <Avatar name={user.displayName} src={user.photoURL} />
+                    <Box>
+                        <Text>{user.displayName}</Text>
+                        <Text>{user.email}</Text>
+                    </Box>
+                </Flex>
             </Link>
             <Flex gap="1rem">
                 <Link href={`/players/${user.uid}`} passHref>
-                    <ChakraLink>
-                        <Button colorScheme="twitter">Profile</Button>
-                    </ChakraLink>
+                    <Button colorScheme="twitter">Profile</Button>
                 </Link>
                 <Button
                     colorScheme="twitter"

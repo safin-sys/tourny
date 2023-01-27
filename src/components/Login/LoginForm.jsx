@@ -13,10 +13,10 @@ import Link from "next/link";
 import { FormControlComponent } from "../shared/FormControlComponent";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useState } from "react";
-import { login } from "../../libs/firebase/auth";
+import { login } from "../../utils/firebase/auth";
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
-import { auth } from "../../libs/firebase";
+import { auth } from "../../utils/firebase";
 
 export const LoginForm = () => {
     const [btnLoading, setBtnLoading] = useState(false);

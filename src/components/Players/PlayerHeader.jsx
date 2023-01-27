@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { auth } from "../../libs/firebase";
+import { auth } from "../../utils/firebase";
 import EditProfileModal from "./EditProfileModal";
 
 const PlayerHeader = ({ player }) => {
