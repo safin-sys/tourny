@@ -20,47 +20,71 @@ import {
     Text,
     Tooltip,
 } from "@chakra-ui/react";
+import {
+    getChampions,
+    getChampionSkins,
+    getChampionSplash,
+} from "@utils/champions";
+import { useEffect } from "react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
     AiOutlineArrowDown,
     AiOutlineArrowUp,
     AiOutlineDelete,
     AiOutlineInfoCircle,
 } from "react-icons/ai";
-// import useChampions from "../../utils/useChampions";
-// import useChampionSkin from "../../utils/useChampionSkin";
 
 const EditProfileModal = ({ isOpen, onClose }) => {
+    const { register, handleSubmit, watch, setValue } = useForm({
+        defaultValues: {
+            offset: 50,
+        },
+    });
+
+    const onSubmit = (e) => {
+        console.log(e);
+    };
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Edit Profile</ModalHeader>
-                <ModalCloseButton />
-                <EditProfileModalBody />
-                <ModalFooter
-                    display="flex"
-                    justifyContent="space-between"
-                    gap="1rem"
-                >
-                    <Button colorScheme="red">
-                        <Text display={["none", "block"]}>Delete Account</Text>
-                        <Box display={["block", "none"]}>
-                            <AiOutlineDelete size="1.1rem" />
-                        </Box>
-                    </Button>
-                    <Flex>
-                        <Button
-                            variant="outline"
-                            colorScheme="twitter"
-                            mr="1rem"
-                            onClick={onClose}
-                        >
-                            Close
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <ModalHeader>Edit Profile</ModalHeader>
+                    <ModalCloseButton />
+                    <EditProfileModalBody
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                    />
+                    <ModalFooter
+                        display="flex"
+                        justifyContent="space-between"
+                        gap="1rem"
+                    >
+                        <Button colorScheme="red">
+                            <Text display={["none", "block"]}>
+                                Delete Account
+                            </Text>
+                            <Box display={["block", "none"]}>
+                                <AiOutlineDelete size="1.1rem" />
+                            </Box>
                         </Button>
-                        <Button colorScheme="twitter">Save</Button>
-                    </Flex>
-                </ModalFooter>
+                        <Flex>
+                            <Button
+                                variant="outline"
+                                colorScheme="twitter"
+                                mr="1rem"
+                                onClick={onClose}
+                            >
+                                Close
+                            </Button>
+                            <Button colorScheme="twitter" type="submit">
+                                Save
+                            </Button>
+                        </Flex>
+                    </ModalFooter>
+                </form>
             </ModalContent>
         </Modal>
     );
@@ -68,14 +92,121 @@ const EditProfileModal = ({ isOpen, onClose }) => {
 
 export default EditProfileModal;
 
-const EditProfileModalBody = () => {
+const EditProfileModalBody = ({ register, watch, setValue }) => {
     return (
         <ModalBody>
-            <form>
-                {/* <ProfileHeader /> */}
-                <ProfileInfo />
-            </form>
+            <ProfileHeader
+                register={register}
+                watch={watch}
+                setValue={setValue}
+            />
+            <ProfileInfo />
         </ModalBody>
+    );
+};
+
+const ProfileHeader = ({ register, watch, setValue }) => {
+    const [champions, setChampions] = useState([]);
+    const [skins, setSkins] = useState([]);
+
+    const selectedChampion = watch("champion");
+    const selectedSkin = watch("skin");
+
+    useEffect(() => {
+        const get = async () => {
+            const data = await getChampions();
+            setChampions(data);
+        };
+
+        if (champions.length === 0) {
+            get();
+        }
+    }, [champions.length]);
+
+    useEffect(() => {
+        const get = async () => {
+            const data = await getChampionSkins(selectedChampion);
+            setSkins(data);
+        };
+
+        if (selectedChampion) {
+            get();
+        }
+    }, [selectedChampion]);
+    return (
+        <>
+            <Heading as="h3" fontSize="1rem" mb="1rem">
+                Profile Header
+            </Heading>
+            <FormControl mt="1rem">
+                <FormLabel htmlFor="profile" display="flex" alignItems="center">
+                    Cover Photo
+                </FormLabel>
+                <Flex gap="1rem">
+                    <Select
+                        placeholder="Select a champion"
+                        {...register("champion", {
+                            onChange: () => setValue("skin", "0"),
+                        })}
+                    >
+                        {champions?.map((champion, i) => (
+                            <option value={champion} key={i}>
+                                {champion}
+                            </option>
+                        ))}
+                    </Select>
+                    <Select
+                        placeholder={!skins ? "Loading..." : "Select a skin"}
+                        {...register("skin")}
+                    >
+                        {skins?.map((skin, i) => (
+                            <option value={skin.num} key={i}>
+                                {skin.name}
+                            </option>
+                        ))}
+                    </Select>
+                </Flex>
+                <Image
+                    src={getChampionSplash(selectedChampion, selectedSkin)}
+                    alt="champion"
+                    my="1rem"
+                    objectFit="cover"
+                    objectPosition={`0 ${watch("offset")}%`}
+                    w="full"
+                    h="150px"
+                    borderRadius="8px"
+                />
+                <Flex justifyContent="space-between" alignItems="center">
+                    <Text>Change Offset</Text>
+                    <Flex gap="1rem">
+                        <IconButton
+                            onClick={() =>
+                                setValue(
+                                    "offset",
+                                    watch("offset") != 0
+                                        ? watch("offset") - 10
+                                        : watch("offset")
+                                )
+                            }
+                        >
+                            <AiOutlineArrowUp />
+                        </IconButton>
+                        <IconButton
+                            onClick={() =>
+                                setValue(
+                                    "offset",
+                                    watch("offset") != 100
+                                        ? watch("offset") + 10
+                                        : watch("offset")
+                                )
+                            }
+                        >
+                            <AiOutlineArrowDown />
+                        </IconButton>
+                    </Flex>
+                </Flex>
+            </FormControl>
+        </>
     );
 };
 
@@ -115,88 +246,6 @@ const ProfileInfo = () => {
                 </FormLabel>
                 <Input id="fb" type="url" />
                 <FormErrorMessage>unhbrighbn</FormErrorMessage>
-            </FormControl>
-        </>
-    );
-};
-
-const ProfileHeader = () => {
-    const { champions } = useChampions();
-    const [selectedChampion, setSelectedChampion] = useState(null);
-    const { skins, isLoading } = useChampionSkin(selectedChampion);
-    const [selectedSkin, setSelectedSkin] = useState(0);
-    const [offset, setOffset] = useState(50);
-    const imgSrc = selectedChampion
-        ? `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${selectedChampion}_${selectedSkin}.jpg`
-        : "/images/404.webp";
-    return (
-        <>
-            <Heading as="h3" fontSize="1rem" mb="1rem">
-                Profile Header
-            </Heading>
-            <FormControl mt="1rem">
-                <FormLabel htmlFor="profile" display="flex" alignItems="center">
-                    Cover Photo
-                </FormLabel>
-                <Flex gap="1rem">
-                    <Select
-                        placeholder="Select a champion"
-                        onChange={(e) => {
-                            setSelectedChampion(e.target.value);
-                            setSelectedSkin(0);
-                        }}
-                        value={selectedChampion}
-                    >
-                        {champions?.map((champion, i) => (
-                            <option value={champion} key={i}>
-                                {champion}
-                            </option>
-                        ))}
-                    </Select>
-                    <Select
-                        placeholder={
-                            isLoading && selectedChampion
-                                ? "Loading..."
-                                : "Select a skin"
-                        }
-                        onChange={(e) => setSelectedSkin(e.target.value)}
-                        value={selectedSkin}
-                    >
-                        {skins?.map((skin, i) => (
-                            <option value={skin.num} key={i}>
-                                {skin.name}
-                            </option>
-                        ))}
-                    </Select>
-                </Flex>
-                <Image
-                    src={imgSrc}
-                    alt="champion"
-                    my="1rem"
-                    objectFit="cover"
-                    objectPosition={`0 ${offset}%`}
-                    w="full"
-                    h="150px"
-                    borderRadius="8px"
-                />
-                <Flex gap="1rem">
-                    <IconButton
-                        onClick={() =>
-                            setOffset((prev) => (prev != 0 ? prev - 10 : prev))
-                        }
-                    >
-                        <AiOutlineArrowUp />
-                    </IconButton>
-                    <IconButton
-                        onClick={() =>
-                            setOffset((prev) =>
-                                prev != 100 ? prev + 10 : prev
-                            )
-                        }
-                    >
-                        <AiOutlineArrowDown />
-                    </IconButton>
-                </Flex>
             </FormControl>
         </>
     );

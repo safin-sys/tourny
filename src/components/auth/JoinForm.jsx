@@ -55,6 +55,7 @@ const JoinForm = ({ teams }) => {
                         },
                     ],
                     match_history: [],
+                    approved: false,
                 });
             }
             await setDoc(doc(db, "users", userAuth.user.uid), {
