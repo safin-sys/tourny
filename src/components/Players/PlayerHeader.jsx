@@ -8,23 +8,28 @@ import {
     Skeleton,
     useDisclosure,
 } from "@chakra-ui/react";
+import { auth } from "@utils/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { auth } from "../../utils/firebase";
 import EditProfileModal from "./EditProfileModal";
 
 const PlayerHeader = ({ player }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [coverLoading, setCoverLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { name, email, profilePicture, coverPicture, phoneNumber, uid } =
-        player ? player : {};
+    const { ign, email, photo, cover, phone } = player || {};
+
+    const router = useRouter();
 
     useEffect(() => {
-        if (auth && auth.currentUser && auth.currentUser.uid === uid) {
-            setIsLoggedIn(true);
-        }
-    }, [player, uid]);
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.uid === router.query.id) {
+                setIsLoggedIn(true);
+            }
+        });
+    }, [router.query]);
     return (
         <>
             <Box>
@@ -39,14 +44,13 @@ const PlayerHeader = ({ player }) => {
                     >
                         <Image
                             src={
-                                coverPicture
-                                    ? coverPicture
+                                cover
+                                    ? cover
                                     : "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Lucian_6.jpg"
                             }
                             alt="Lucian"
-                            layout="fill"
-                            objectFit="cover"
-                            objectPosition="0 0"
+                            fill
+                            sizes="100%"
                             priority
                             onLoadingComplete={() => setCoverLoading(false)}
                             style={{
@@ -57,11 +61,13 @@ const PlayerHeader = ({ player }) => {
                                     ? "scale(1.1)"
                                     : "scale(1)",
                                 transition: "all 0.7s",
+                                objectFit: "cover",
+                                objectPosition: "0 0",
                             }}
                         />
                     </AspectRatio>
                     <Skeleton
-                        isLoaded={profilePicture || profilePicture === null}
+                        isLoaded={photo || photo === null}
                         pos="absolute"
                         top="54%"
                         ml="1rem"
@@ -69,11 +75,11 @@ const PlayerHeader = ({ player }) => {
                     >
                         <Avatar
                             size="xl"
-                            name={name}
+                            name={ign}
                             border="2px solid #3182ce"
                             src={
-                                profilePicture
-                                    ? profilePicture
+                                photo
+                                    ? photo
                                     : "https://ddragon.leagueoflegends.com/cdn/12.8.1/img/profileicon/0.png"
                             }
                         />
@@ -94,9 +100,9 @@ const PlayerHeader = ({ player }) => {
                     )}
                 </Flex>
                 <Box m="1.5rem 0 0 1rem">
-                    <Skeleton isLoaded={name}>
+                    <Skeleton isLoaded={ign}>
                         <Flex alignItems="center" gap=".25rem">
-                            <Heading fontSize="1rem">{name}</Heading>
+                            <Heading fontSize="1rem">{ign}</Heading>
                             <Heading
                                 fontSize="1rem"
                                 h="5px"
@@ -112,7 +118,7 @@ const PlayerHeader = ({ player }) => {
                     </Skeleton>
                     <Skeleton isLoaded={email}>
                         <Heading fontSize="1rem" color="gray.500" mt=".25rem">
-                            {email} {phoneNumber ? `| ${phoneNumber}` : null}
+                            {email} {phone ? `| ${phone}` : null}
                         </Heading>
                     </Skeleton>
                 </Box>

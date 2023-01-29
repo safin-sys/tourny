@@ -1,30 +1,34 @@
+import Nav from "@components/shared/Nav";
 import { Container } from "@chakra-ui/react";
-import Nav from "../../src/components/shared/Nav";
-import Footer from "../../src/components/shared/Footer";
-import PlayerHeader from "../../src/components/Players/PlayerHeader";
-import { useEffect, useState } from "react";
-import { getUserFromFirestore } from "../../src/utils/firebase/db";
-import { useRouter } from "next/router";
+import Footer from "@components/shared/Footer";
+import PlayerHeader from "@components/players/PlayerHeader";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@utils/firebase";
 
-export default function Player() {
-	const [player, setPlayer] = useState(null);
-
-	const router = useRouter()
-	useEffect(() => {
-		if (router.query.id && !player) {
-			getUserFromFirestore(router.query.id).then((user) => {
-				setPlayer({
-					...user,
-					uid: router.query.id,
-				});
-			})
-		}
-	}, [player, router.isReady, router.query.id]);
-	return (
-		<Container>
-			<Nav />
-			<PlayerHeader player={player} />
-			<Footer />
-		</Container>
-	)
+export default function Player({ player }) {
+    return (
+        <Container>
+            <Nav />
+            <PlayerHeader player={player} />
+            <Footer />
+        </Container>
+    );
 }
+
+export const getServerSideProps = async (ctx) => {
+    const playerSnap = await getDoc(doc(db, "users", ctx.query.id));
+    if (playerSnap.exists()) {
+        return {
+            props: {
+                player: playerSnap.data(),
+            },
+        };
+    } else {
+        return {
+            redirect: {
+                destination: "/404",
+                permanent: false,
+            },
+        };
+    }
+};

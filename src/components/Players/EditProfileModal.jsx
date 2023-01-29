@@ -27,8 +27,8 @@ import {
     AiOutlineDelete,
     AiOutlineInfoCircle,
 } from "react-icons/ai";
-import useChampions from "../../utils/useChampions";
-import useChampionSkin from "../../utils/useChampionSkin";
+// import useChampions from "../../utils/useChampions";
+// import useChampionSkin from "../../utils/useChampionSkin";
 
 const EditProfileModal = ({ isOpen, onClose }) => {
     return (
@@ -72,7 +72,7 @@ const EditProfileModalBody = () => {
     return (
         <ModalBody>
             <form>
-                <ProfileHeader />
+                {/* <ProfileHeader /> */}
                 <ProfileInfo />
             </form>
         </ModalBody>

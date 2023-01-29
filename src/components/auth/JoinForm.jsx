@@ -62,6 +62,9 @@ const JoinForm = ({ teams }) => {
                 ign: e.ign,
                 role: e.role,
                 team: e.team,
+                photo: null,
+                cover: null,
+                phone: null,
             });
             toast({
                 title: "Success",
