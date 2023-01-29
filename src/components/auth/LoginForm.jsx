@@ -1,22 +1,21 @@
 import {
     Button,
     Flex,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
     Grid,
     Heading,
-    Link as ChakraLink,
+    Input,
     useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { loginVal } from "../../utils/validation";
-import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
-import { FormControlComponent } from "../shared/FormControlComponent";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useState } from "react";
-import { login } from "../../utils/firebase/auth";
 import { useRouter } from "next/router";
-import { signOut } from "firebase/auth";
-import { auth } from "../../utils/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@utils/firebase";
 
 export const LoginForm = () => {
     const [btnLoading, setBtnLoading] = useState(false);
@@ -25,21 +24,15 @@ export const LoginForm = () => {
         handleSubmit,
         formState: { errors },
         setError,
-    } = useForm({
-        resolver: yupResolver(loginVal),
-    });
+    } = useForm();
 
     const router = useRouter();
     const toast = useToast();
 
     const onSubmit = async (e) => {
         setBtnLoading(true);
-        const { email, password } = e;
-        const promise = await login(email, password);
-        const user = await promise;
-        if (user.user?.email) {
-            setBtnLoading(false);
-            router.push("/");
+        try {
+            await signInWithEmailAndPassword(auth, e.email, e.password);
             toast({
                 title: "Success",
                 description: "You have successfully logged in",
@@ -47,17 +40,23 @@ export const LoginForm = () => {
                 duration: 9000,
                 isClosable: true,
             });
-        }
-        if (user === "auth/user-not-found" || user === "auth/wrong-password") {
             setBtnLoading(false);
-            setError("email", {
-                type: "manual",
-                message: "Email or password is incorrect",
-            });
-            setError("password", {
-                type: "manual",
-                message: "Email or password is incorrect",
-            });
+            router.push("/");
+        } catch (error) {
+            if (
+                error.code === "auth/user-not-found" ||
+                error.code === "auth/wrong-password"
+            ) {
+                setBtnLoading(false);
+                setError("email", {
+                    type: "manual",
+                    message: "Email or password is incorrect",
+                });
+                setError("password", {
+                    type: "manual",
+                    message: "Email or password is incorrect",
+                });
+            }
         }
     };
     return (
@@ -76,20 +75,28 @@ export const LoginForm = () => {
                 >
                     Login
                 </Heading>
-                <FormControlComponent
-                    isInvalid={errors.email}
-                    label="Email"
-                    name="email"
-                    type="email"
-                    register={register}
-                />
-                <FormControlComponent
-                    isInvalid={errors.password}
-                    label="Password"
-                    name="password"
-                    type="password"
-                    register={register}
-                />
+                <FormControl isInvalid={errors.email}>
+                    <FormLabel>Email</FormLabel>
+                    <Input
+                        type="email"
+                        {...register("email", {
+                            required: "Email is required",
+                        })}
+                    />
+                    <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl isInvalid={errors.password}>
+                    <FormLabel>Password</FormLabel>
+                    <Input
+                        type="password"
+                        {...register("password", {
+                            required: "Password is required",
+                        })}
+                    />
+                    <FormErrorMessage>
+                        {errors.password?.message}
+                    </FormErrorMessage>
+                </FormControl>
 
                 <Flex
                     justifyContent="space-between"
@@ -97,12 +104,10 @@ export const LoginForm = () => {
                     gap="1rem"
                 >
                     <Flex flexDir="column">
-                        <Link href="/signup" passHref>
-                            <ChakraLink>Dont have an account?</ChakraLink>
+                        <Link href="/auth/join">
+                            Don&apos;t have an account?
                         </Link>
-                        <Link href="/login/forgot" passHref>
-                            <ChakraLink>Forgot password?</ChakraLink>
-                        </Link>
+                        <Link href="/auth/reset">Forgot password?</Link>
                     </Flex>
                     <Button
                         colorScheme="twitter"

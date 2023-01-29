@@ -7,12 +7,22 @@ import { auth, db } from "@utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { ChakraProvider } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
 
-function MyApp({ Component, pageProps }) {
+const App = ({ Component, pageProps }) => {
+    const router = useRouter();
+    const guestPaths = useMemo(
+        () => ["/auth/join", "/auth/login", "/auth/reset"],
+        []
+    );
     useEffect(() => {
         if (!store.getState().user) {
             onAuthStateChanged(auth, (user) => {
                 if (user) {
+                    if (guestPaths.includes(router.pathname)) {
+                        router.push("/");
+                    }
                     const userDoc = doc(db, "users", user.uid);
                     getDoc(userDoc).then((userDoc) => {
                         if (userDoc.exists()) {
@@ -39,7 +49,7 @@ function MyApp({ Component, pageProps }) {
                 }
             });
         }
-    }, []);
+    }, [guestPaths, router]);
     return (
         <>
             <Head>
@@ -86,6 +96,6 @@ function MyApp({ Component, pageProps }) {
             </Provider>
         </>
     );
-}
+};
 
-export default MyApp;
+export default App;

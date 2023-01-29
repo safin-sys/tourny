@@ -1,7 +1,7 @@
 import { Container } from "@chakra-ui/react";
 import Nav from "@components/shared/Nav";
 import Footer from "@components/shared/Footer";
-import JoinForm from "@components/auth/join/JoinForm";
+import JoinForm from "@components/auth/JoinForm";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@utils/firebase";
 

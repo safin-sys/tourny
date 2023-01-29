@@ -1,14 +1,14 @@
 import { Container } from "@chakra-ui/react";
-import Nav from "../../src/components/shared/Nav";
-import Footer from "../../src/components/shared/Footer";
-import ForgotForm from "../../src/components/Login/ForgotForm";
+import Nav from "@components/shared/Nav";
+import Footer from "@components/shared/Footer";
+import ResetForm from "@components/auth/ResetForm";
 
 export default function Login() {
     return (
         <Container>
             <Nav />
-            <ForgotForm />
+            <ResetForm />
             <Footer />
         </Container>
-    )
+    );
 }

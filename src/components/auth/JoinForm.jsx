@@ -48,7 +48,12 @@ const JoinForm = ({ teams }) => {
                 await setDoc(doc(db, "teams", e.team), {
                     name: e.team,
                     logo: "",
-                    members: [],
+                    members: [
+                        {
+                            captain: true,
+                            uid: userAuth.user.uid,
+                        },
+                    ],
                     match_history: [],
                 });
             }
@@ -65,6 +70,7 @@ const JoinForm = ({ teams }) => {
                 duration: 9000,
                 isClosable: true,
             });
+            router.push("/");
             setBtnLoading(false);
         } catch (error) {
             console.error(error);
@@ -203,7 +209,7 @@ const JoinForm = ({ teams }) => {
                     alignItems="center"
                     gap="1rem"
                 >
-                    <Link href="/login">Already have an account?</Link>
+                    <Link href="/auth/login">Already have an account?</Link>
                     <Button
                         colorScheme="twitter"
                         w="max"
